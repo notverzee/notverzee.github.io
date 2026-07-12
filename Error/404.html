@@ -2,6 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+(() => {
+    const redirects = {
+        "/artfight": "https://artfight.net/~twechon",
+
+        // Add more here:
+        // "/discord": "https://discord.gg/7hJv59SNyZ",
+         // "/studio": "https://discord.gg/WZnsE4r4Fp",
+        // "/youtube": "https://youtube.com/@twechon",
+        // "/artfight": "https://artfight.net/~twechon",
+         // "/radiostar": "https://radiostar.productions",
+        // "/x": "https://x.com/notverzee",
+    };
+
+    // Normalize the path (remove trailing slash)
+    const path = window.location.pathname.replace(/\/$/, "").toLowerCase();
+
+    if (redirects[path]) {
+        window.location.replace(redirects[path]);
+    }
+})();
+</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 — Page Not Found | Twechon</title>
   <link rel="shortcut icon" type="image/x-icon" href="/assets/verzeefavicon.png">
