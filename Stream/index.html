@@ -2,26 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="canonical" href="https://twechon.com/Socials">
+  <link rel="canonical" href="https://twechon.com/Stream">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Twechon — Socials</title>
+  <title>Twechon — Stream</title>
   <link rel="shortcut icon" type="image/x-icon" href="/assets/verzeefavicon.png">
   <link rel="stylesheet" href="/styles.css">  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <!-- Open Graph / Discord embed -->
   <meta property="og:type"        content="website">
   <meta property="og:site_name"   content="Twechon">
-  <meta property="og:url"         content="https://twechon.com/Socials">
-  <meta property="og:title"       content="The Official Twechon Site!">
-  <meta property="og:description" content="Animations, shows, music, and more! Join our community, today.">
+  <meta property="og:url"         content="https://twechon.com/Stream">
+  <meta property="og:title"       content="Twechon — Stream">
+  <meta property="og:description" content="Live status and recent uploads from every Twechon channel, pulled straight from YouTube.">
   <meta property="og:image"       content="https://twechon.com/assets/embed.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height"content="630">
   <!-- Twitter card -->
   <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="The Official Twechon Site!">
-  <meta name="twitter:description" content="Animations, shows, music, and more! Join our community, today.">
+  <meta name="twitter:title"       content="Twechon — Stream">
+  <meta name="twitter:description" content="Live status and recent uploads from every Twechon channel, pulled straight from YouTube.">
   <meta name="twitter:image"       content="https://twechon.com/assets/embed.png">
-  <meta name="description"         content="Animations, shows, music, and more! Join our community, today.">
+  <meta name="description"         content="Live status and recent uploads from every Twechon channel, pulled straight from YouTube.">
 </head>
 <body>
 
@@ -40,7 +40,7 @@
           <a href="/Home/"><img class="nav-icon" src="/assets/home.png" alt=""><span>Home</span></a>
         </li>
         <li class="nav-item">
-          <a href="/Stream/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M8.5 8.5a5 5 0 0 1 7 0"></path><path d="M5.3 5.3a9.5 9.5 0 0 1 13.4 0"></path></svg><span>Stream</span></a>
+          <a href="/Stream/" class="active"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M8.5 8.5a5 5 0 0 1 7 0"></path><path d="M5.3 5.3a9.5 9.5 0 0 1 13.4 0"></path></svg><span>Stream</span></a>
         </li>
         <li class="nav-item nav-has-dropdown">
           <a href="/Shows/"><img class="nav-icon" src="/assets/shows.png" alt=""><span>Shows</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -70,7 +70,7 @@
           <button class="nav-drop-toggle" aria-label="Open submenu">›</button>
         </li>
         <li class="nav-item nav-has-dropdown">
-          <a href="/Socials/" class="active"><img class="nav-icon" src="/assets/socials.png" alt=""><span>Socials</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="/Socials/"><img class="nav-icon" src="/assets/socials.png" alt=""><span>Socials</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           <div class="nav-dropdown">
             <div class="nav-dropdown-inner">            <a href="https://discord.com/invite/7hJv59SNyZ" target="_blank" rel="noopener noreferrer">Discord</a>
             <a href="https://www.tiktok.com/@liampars15" target="_blank" rel="noopener noreferrer">TikTok</a>
@@ -120,54 +120,44 @@
   </header>
 
   <div class="page">
-    <h1 class="section-label">Follow Me</h1>
-    <div class="socials-list">
+    <h1 class="section-label fade-up">Stream</h1>
 
-      <div class="reveal"><a class="social-row-card" href="https://discord.com/invite/7hJv59SNyZ" target="_blank" rel="noopener noreferrer">
-        <div class="social-row-card-icon">
-          <img src="/assets/discord-icon.png" alt="Discord">
+    <!-- Hero -->
+    <div class="reveal" style="margin-bottom:40px;">
+      <div class="card stream-hero">
+        <div class="stream-carousel-wrap" id="stream-carousel">
+          <div class="stream-carousel-live"><span class="dot"></span>LIVE STATUS</div>
+          <!-- TODO(Liam): swap these for real video thumbnails (e.g. https://i.ytimg.com/vi/VIDEO_ID/hqdefault.jpg) once you've got the IDs handy -->
+          <img src="/assets/realityshiftlogo.png" alt="Reality Shift" class="carousel-active">
+          <img src="/assets/stickylogo.png" alt="Sticky">
+          <img src="/assets/mamfluxlogo.png" alt="Mamflux">
+          <img src="/assets/sketchsquadlogo.png" alt="Sketchsquad">
+          <img src="/assets/cosmicframelogowhite.png" alt="Cosmic Frame">
+          <img src="/assets/twechon.png" alt="Twechon">
         </div>
-        <div class="social-row-card-text">
-          <span class="social-row-card-name">Discord</span>
-          <span class="social-row-card-handle">discord.com/invite/7hJv59SNyZ</span>
-          <span class="social-row-card-desc">Join the community server — chat, updates, and behind-the-scenes.</span>
+        <div class="stream-hero-copy">
+          <h2>Twechon Stream</h2>
+          <p>A live dashboard for every Twechon channel — pulls current live status and recent uploads straight from the YouTube Data API, all in one place.</p>
+          <ul>
+            <li>Live status for every channel, updated automatically</li>
+            <li>Recent uploads pulled straight from YouTube</li>
+            <li>One page, no digging through separate channels</li>
+            <li>Powered by the YouTube Data API v3</li>
+          </ul>
+          <a class="btn-primary" href="https://stream.twechon.com" target="_blank" rel="noopener noreferrer" style="margin-top:8px;width:fit-content;">Open Stream Site</a>
         </div>
-      </a></div>
-
-      <div class="reveal"><a class="social-row-card" href="https://www.tiktok.com/@liampars15" target="_blank" rel="noopener noreferrer">
-        <div class="social-row-card-icon">
-          <img src="/assets/tiktok-icon.png" alt="TikTok">
-        </div>
-        <div class="social-row-card-text">
-          <span class="social-row-card-name">TikTok</span>
-          <span class="social-row-card-handle">@liampars15</span>
-          <span class="social-row-card-desc">Clips, short animations, and random stuff.</span>
-        </div>
-      </a></div>
-
-      <div class="reveal"><a class="social-row-card" href="https://www.twitch.tv/notverzee" target="_blank" rel="noopener noreferrer">
-        <div class="social-row-card-icon">
-          <img src="/assets/twitch-icon.png" alt="Twitch">
-        </div>
-        <div class="social-row-card-text">
-          <span class="social-row-card-name">Twitch</span>
-          <span class="social-row-card-handle">@notverzee</span>
-          <span class="social-row-card-desc">Live streams — gaming, creative sessions, and hangouts.</span>
-        </div>
-      </a></div>
-
-      <div class="reveal"><a class="social-row-card" href="https://x.com/notverzee" target="_blank" rel="noopener noreferrer">
-        <div class="social-row-card-icon">
-          <img src="/assets/x-icon.png" alt="X">
-        </div>
-        <div class="social-row-card-text">
-          <span class="social-row-card-name">X</span>
-          <span class="social-row-card-handle">@notverzee</span>
-          <span class="social-row-card-desc">Updates, thoughts, and project announcements.</span>
-        </div>
-      </a></div>
-
+      </div>
     </div>
+
+    <!-- CTA -->
+    <div class="reveal">
+      <div class="card catalog-cta">
+        <h2 class="section-label" style="margin-bottom:8px;">Never Miss an Upload</h2>
+        <p>Check stream.twechon.com any time to see who's live and what's new.</p>
+        <a class="btn-primary" href="https://stream.twechon.com" target="_blank" rel="noopener noreferrer">Open Stream Site</a>
+      </div>
+    </div>
+
   </div>
 
   <footer class="site-footer">
@@ -210,6 +200,7 @@
           <li><a href="/Socials/">Socials</a></li>
           <li><a href="/Games/">Games</a></li>
           <li><a href="/Music/">Music</a></li>
+          <li><a href="/Team/">Team</a></li>
           <li><a href="/Merch/">Merch</a></li>
         </ul>
       </div>
@@ -247,6 +238,7 @@
       <a href="https://youtube.com/@cosmicframeprod" target="_blank" rel="noopener noreferrer">youtube.com/@cosmicframeprod</a>
     </div>
   </footer>
+
   <script>
   (function() {
     const canvas = document.getElementById("star-canvas");
@@ -269,11 +261,26 @@
   })();
   (function() {
     const els = document.querySelectorAll(".reveal");
-    const io = new IntersectionObserver((e) => { e.forEach(x => { if(x.isIntersecting){x.target.classList.add("revealed");io.unobserve(x.target);} }); }, { threshold: 0 });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); io.unobserve(e.target); } });
+    }, { threshold: 0 });
     els.forEach(el => io.observe(el));
   })();
   </script>
   <script src="/script.js"></script>
+  <script>
+  // Stream thumbnail carousel
+  (function(){
+    var imgs = document.querySelectorAll('#stream-carousel img');
+    if(!imgs.length) return;
+    var cur = 0;
+    setInterval(function(){
+      imgs[cur].classList.remove('carousel-active');
+      cur = (cur + 1) % imgs.length;
+      imgs[cur].classList.add('carousel-active');
+    }, 2200);
+  })();
+  </script>
 <script>
 (function(){
   var btn  = document.getElementById('nav-toggle-btn');
