@@ -967,33 +967,49 @@ nav a:hover .nav-icon, nav a.active .nav-icon { opacity: 1; }
 .stream-hero-copy ul li { color:var(--muted); font-size:.88rem; padding-left:16px; position:relative; }
 .stream-hero-copy ul li::before { content:'▸'; position:absolute; left:0; color:var(--purple-mid); }
 
-.stream-carousel-wrap {
+.stream-hero-visual {
   width:320px; min-width:320px; max-width:320px;
   aspect-ratio:16/9;
   border-radius:10px; overflow:hidden; flex-shrink:0; position:relative;
   border:1px solid var(--border);
-  background:#111;
+  background:radial-gradient(circle at 30% 20%, rgba(168,85,247,.18), transparent 60%),
+             radial-gradient(circle at 80% 80%, rgba(236,72,153,.14), transparent 55%),
+             #111;
+  display:flex; align-items:center; justify-content:center;
 }
-.stream-carousel-wrap img {
-  width:100%; height:100%; object-fit:cover; display:block;
-  position:absolute; top:0; left:0;
-  opacity:0; transition:opacity .6s ease;
+.stream-hero-visual img { width:56%; max-width:170px; object-fit:contain; opacity:.92; }
+
+/* ── Recent uploads ─────────────────────────────────────────── */
+.stream-uploads { padding:28px 28px 32px; }
+.stream-uploads-head {
+  display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  flex-wrap:wrap; margin-bottom:18px;
 }
-.stream-carousel-wrap img.carousel-active { opacity:1; }
-.stream-carousel-live {
-  position:absolute; top:10px; left:10px; z-index:2;
-  display:flex; align-items:center; gap:6px;
-  background:rgba(10,7,18,.75); backdrop-filter:blur(6px);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:20px; padding:4px 10px 4px 8px;
-  font-size:.7rem; font-weight:600; letter-spacing:.04em; color:var(--text);
+.stream-uploads-head h2 { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.06em; color:var(--text); }
+.stream-uploads-link { font-size:.8rem; font-weight:600; color:var(--purple-mid); text-decoration:none; white-space:nowrap; }
+.stream-uploads-link:hover { color:var(--pink); }
+.stream-uploads-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.stream-upload-card {
+  display:flex; flex-direction:column; gap:8px;
+  text-decoration:none; color:inherit;
+  border:1px solid var(--border); border-radius:10px;
+  padding:8px; background:rgba(255,255,255,.02);
+  transition:border-color .2s, background .2s, transform .2s;
 }
-.stream-carousel-live .dot { width:7px; height:7px; border-radius:50%; background:#ef4444; box-shadow:0 0 0 0 rgba(239,68,68,.6); animation:stream-pulse 1.8s infinite; }
-@keyframes stream-pulse {
-  0%   { box-shadow:0 0 0 0 rgba(239,68,68,.55); }
-  70%  { box-shadow:0 0 0 8px rgba(239,68,68,0); }
-  100% { box-shadow:0 0 0 0 rgba(239,68,68,0); }
+.stream-upload-card:hover { border-color:rgba(168,85,247,.4); background:var(--surface-hover); transform:translateY(-2px); }
+.stream-upload-thumb {
+  aspect-ratio:16/9; border-radius:6px; overflow:hidden;
+  background:#111; display:flex; align-items:center; justify-content:center;
+  position:relative;
 }
+.stream-upload-thumb img { width:62%; object-fit:contain; opacity:.9; }
+.stream-upload-thumb::after {
+  content:'▶'; position:absolute; bottom:6px; right:8px;
+  font-size:.6rem; color:rgba(255,255,255,.55);
+}
+.stream-upload-info { display:flex; flex-direction:column; gap:2px; padding:0 2px; }
+.stream-upload-title { font-size:.8rem; font-weight:600; color:var(--text); line-height:1.3; }
+.stream-upload-meta { font-size:.7rem; color:var(--muted); }
 
 /* ════════════════════════════════════════════════
    RESPONSIVE
@@ -1003,6 +1019,7 @@ nav a:hover .nav-icon, nav a.active .nav-icon { opacity: 1; }
   .socials-list  { grid-template-columns:repeat(2,1fr); }
   .scratch-accounts { grid-template-columns:repeat(2,1fr); }
   .team-coming-grid { grid-template-columns:repeat(3,1fr); }
+  .stream-uploads-grid { grid-template-columns:repeat(2,1fr); }
 }
 
 @media (max-width: 780px) {
@@ -1133,8 +1150,10 @@ nav a:hover .nav-icon, nav a.active .nav-icon { opacity: 1; }
   .merch-hero-img { width:100%; height:180px; }
   .merch-hero-copy h2 { font-size:1.8rem; }
   .stream-hero { padding:20px; gap:18px; flex-direction:column; }
-  .stream-carousel-wrap { width:100%; max-width:100%; }
+  .stream-hero-visual { width:100%; max-width:100%; }
   .stream-hero-copy h2 { font-size:1.8rem; }
+  .stream-uploads { padding:20px; }
+  .stream-uploads-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
   .merch-gallery { grid-template-columns:repeat(2,1fr); gap:10px; }
   .home-merch-banner { padding:18px 20px; gap:14px; }
   .home-merch-banner h3 { font-size:1.3rem; }

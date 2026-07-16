@@ -40,7 +40,7 @@
           <a href="/Home/"><img class="nav-icon" src="/assets/home.png" alt=""><span>Home</span></a>
         </li>
         <li class="nav-item">
-          <a href="/Stream/" class="active"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M8.5 8.5a5 5 0 0 1 7 0"></path><path d="M5.3 5.3a9.5 9.5 0 0 1 13.4 0"></path></svg><span>Stream</span></a>
+          <a href="/Stream/" class="active"><img class="nav-icon" src="/assets/stream.png" alt=""><span>Stream</span></a>
         </li>
         <li class="nav-item nav-has-dropdown">
           <a href="/Shows/"><img class="nav-icon" src="/assets/shows.png" alt=""><span>Shows</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -125,14 +125,7 @@
     <!-- Hero -->
     <div class="reveal" style="margin-bottom:40px;">
       <div class="card stream-hero">
-        <div class="stream-carousel-wrap" id="stream-carousel">
-          <div class="stream-carousel-live"><span class="dot"></span>LIVE STATUS</div>
-          <!-- TODO(Liam): swap these for real video thumbnails (e.g. https://i.ytimg.com/vi/VIDEO_ID/hqdefault.jpg) once you've got the IDs handy -->
-          <img src="/assets/realityshiftlogo.png" alt="Reality Shift" class="carousel-active">
-          <img src="/assets/stickylogo.png" alt="Sticky">
-          <img src="/assets/mamfluxlogo.png" alt="Mamflux">
-          <img src="/assets/sketchsquadlogo.png" alt="Sketchsquad">
-          <img src="/assets/cosmicframelogowhite.png" alt="Cosmic Frame">
+        <div class="stream-hero-visual">
           <img src="/assets/twechon.png" alt="Twechon">
         </div>
         <div class="stream-hero-copy">
@@ -145,6 +138,47 @@
             <li>Powered by the YouTube Data API v3</li>
           </ul>
           <a class="btn-primary" href="https://stream.twechon.com" target="_blank" rel="noopener noreferrer" style="margin-top:8px;width:fit-content;">Open Stream Site</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent uploads -->
+    <div class="reveal" style="margin-bottom:40px;">
+      <div class="card stream-uploads">
+        <div class="stream-uploads-head">
+          <h2>Recent Uploads — Twechon</h2>
+          <a class="stream-uploads-link" href="https://youtube.com/@twechon" target="_blank" rel="noopener noreferrer">View channel ↗</a>
+        </div>
+        <!-- TODO(Liam): swap these for real upload data (thumbnail, title, link) from the YouTube Data API, same as stream.twechon.com pulls -->
+        <div class="stream-uploads-grid">
+          <a class="stream-upload-card" href="https://youtube.com/@twechon" target="_blank" rel="noopener noreferrer">
+            <div class="stream-upload-thumb"><img src="/assets/realityshiftlogo.png" alt=""></div>
+            <div class="stream-upload-info">
+              <span class="stream-upload-title">Reality Shift — Latest Episode</span>
+              <span class="stream-upload-meta">Twechon</span>
+            </div>
+          </a>
+          <a class="stream-upload-card" href="https://youtube.com/@twechon" target="_blank" rel="noopener noreferrer">
+            <div class="stream-upload-thumb"><img src="/assets/stickylogo.png" alt=""></div>
+            <div class="stream-upload-info">
+              <span class="stream-upload-title">Sticky — Latest Upload</span>
+              <span class="stream-upload-meta">Twechon</span>
+            </div>
+          </a>
+          <a class="stream-upload-card" href="https://youtube.com/@twechon" target="_blank" rel="noopener noreferrer">
+            <div class="stream-upload-thumb"><img src="/assets/mamfluxlogo.png" alt=""></div>
+            <div class="stream-upload-info">
+              <span class="stream-upload-title">Mamflux — Latest Upload</span>
+              <span class="stream-upload-meta">Twechon</span>
+            </div>
+          </a>
+          <a class="stream-upload-card" href="https://youtube.com/@twechon" target="_blank" rel="noopener noreferrer">
+            <div class="stream-upload-thumb"><img src="/assets/sketchsquadlogo.png" alt=""></div>
+            <div class="stream-upload-info">
+              <span class="stream-upload-title">Sketchsquad — Latest Upload</span>
+              <span class="stream-upload-meta">Twechon</span>
+            </div>
+          </a>
         </div>
       </div>
     </div>
@@ -268,19 +302,6 @@
   })();
   </script>
   <script src="/script.js"></script>
-  <script>
-  // Stream thumbnail carousel
-  (function(){
-    var imgs = document.querySelectorAll('#stream-carousel img');
-    if(!imgs.length) return;
-    var cur = 0;
-    setInterval(function(){
-      imgs[cur].classList.remove('carousel-active');
-      cur = (cur + 1) % imgs.length;
-      imgs[cur].classList.add('carousel-active');
-    }, 2200);
-  })();
-  </script>
 <script>
 (function(){
   var btn  = document.getElementById('nav-toggle-btn');
