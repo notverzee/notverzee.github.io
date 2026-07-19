@@ -1,0 +1,1664 @@
+/* ── Google Fonts ───────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+/* ── Tokens ─────────────────────────────────────────────────── */
+:root {
+  --bg:            #0a0710;
+  --surface:       rgba(255,255,255,0.04);
+  --surface-hover: rgba(255,255,255,0.08);
+  --border:        rgba(255,255,255,0.08);
+  --purple:        #7c3aed;
+  --purple-mid:    #a855f7;
+  --pink:          #d946ef;
+  --text:          #f0eaf8;
+  --muted:         #9d8db5;
+  --header-h:      64px;
+  --radius:        12px;
+  --max-w:         1100px;
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+/* ════════════════════════════════════════════════
+   STAR CANVAS BACKGROUND
+════════════════════════════════════════════════ */
+#star-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Everything sits above the canvas */
+header, .page, main, .site-footer { position: relative; z-index: 1; }
+
+/* ════════════════════════════════════════════════
+   PAGE LOAD FADE-IN
+════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp .55s ease forwards;
+}
+
+/* Stagger children */
+.fade-up:nth-child(1) { animation-delay: .05s; }
+.fade-up:nth-child(2) { animation-delay: .13s; }
+.fade-up:nth-child(3) { animation-delay: .21s; }
+.fade-up:nth-child(4) { animation-delay: .29s; }
+.fade-up:nth-child(5) { animation-delay: .37s; }
+.fade-up:nth-child(6) { animation-delay: .45s; }
+.fade-up:nth-child(7) { animation-delay: .53s; }
+
+/* Scroll-reveal — JS adds .revealed */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .55s ease, transform .55s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Sticky Header / Nav ───────────────────────────────────── */
+header {
+  position: fixed;
+  top:0; left:0; right:0;
+  z-index: 100;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  background: rgba(10,7,16,0.90);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  width: 100%;
+  max-width: var(--max-w);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.header-brand img { height: 30px; width: auto; object-fit: contain; }
+.header-brand span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.45rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  line-height: 1;
+}
+
+nav { margin-left: auto; position: relative; }
+.nav-list { list-style: none; display: flex; gap: 1px; align-items: center; }
+.nav-list > li { position: relative; }
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 9px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.79rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: color .18s, background .18s;
+  white-space: nowrap;
+}
+nav a:hover, nav a.active { color: var(--text); background: var(--surface-hover); }
+
+.nav-icon {
+  width: 13px; min-width: 13px; max-width: 13px;
+  height: 13px; min-height: 13px; max-height: 13px;
+  object-fit: contain; display: block;
+  opacity: 0.7; flex-shrink: 0;
+  transition: opacity .18s;
+}
+nav a:hover .nav-icon, nav a.active .nav-icon { opacity: 1; }
+
+.nav-chevron {
+  width: 8px; height: 5px; flex-shrink: 0;
+  opacity: 0.45; transition: transform .2s, opacity .18s;
+}
+.nav-has-dropdown:hover .nav-chevron { transform: rotate(180deg); opacity: 0.85; }
+
+/* Arrow toggle buttons are mobile-only; hidden on desktop by default */
+.nav-drop-toggle { display: none; }
+
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0px);
+  min-width: 190px;
+  padding-top: 10px; /* invisible hover bridge over the gap */
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s;
+  z-index: 200;
+}
+.nav-dropdown-inner {
+  background: rgba(10,7,18,0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  position: relative;
+}
+.nav-dropdown-inner::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 50%;
+  width: 9px; height: 9px;
+  background: rgba(10,7,18,0.98);
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  transform: translateX(-50%) rotate(45deg);
+}
+.nav-has-dropdown:hover .nav-dropdown {
+  opacity: 1;
+  pointer-events: auto;
+}
+.nav-dropdown a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 6px;
+  font-size: .80rem; color: var(--muted); background: transparent;
+  white-space: nowrap;
+}
+.nav-dropdown a:hover { color: var(--text); background: var(--surface-hover); }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 34px; height: 34px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+  padding: 7px;
+  flex-shrink: 0;
+}
+.nav-toggle span {
+  display: block; width: 100%; height: 1.5px;
+  background: var(--muted); border-radius: 2px;
+  transition: transform .22s, opacity .22s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+/* ── Page wrapper ───────────────────────────────────────────── */
+.page {
+  padding-top: calc(var(--header-h) + 48px);
+  padding-bottom: 64px;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.page > * { width: 100%; }
+
+/* Ensure footer always sits at the bottom and is full-width */
+.page { flex: 1; }
+
+/* ── Section label ──────────────────────────────────────────── */
+.section-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.07em;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, var(--purple-mid), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+.section-block { margin-bottom: 56px; }
+.divider { width: 100%; height: 1px; background: var(--border); margin: 40px 0; }
+
+/* ── Frosted card ───────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow: hidden;
+  transition: border-color .2s, transform .2s, background .2s;
+}
+.card:hover {
+  border-color: rgba(168,85,247,.4);
+  background: var(--surface-hover);
+  transform: translateY(-2px);
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-block;
+  padding: 11px 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: #fff;
+  font-weight: 600;
+  font-size: .92rem;
+  text-decoration: none;
+  transition: opacity .18s, transform .18s;
+}
+.btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+
+.btn-outline {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: 1px solid var(--purple-mid);
+  color: var(--purple-mid);
+  font-weight: 600;
+  font-size: .88rem;
+  text-decoration: none;
+  transition: background .18s, color .18s;
+}
+.btn-outline:hover { background: rgba(168,85,247,.12); color: var(--text); }
+
+/* ════════════════════════════════════════════════
+   HOME — HERO
+════════════════════════════════════════════════ */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 72px 24px 56px;
+  gap: 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 56px;
+  backdrop-filter: blur(12px);
+}
+.hero-logo {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 24px rgba(168,85,247,.35));
+  animation: logoFloat 4s ease-in-out infinite;
+}
+@keyframes logoFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+.hero h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.4rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+.hero p { color: var(--muted); max-width: 500px; font-size: 1rem; }
+
+/* ════════════════════════════════════════════════
+   HOME — SHOW BUTTONS (rectangular cards, centered grid)
+════════════════════════════════════════════════ */
+.home-shows-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.home-show-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 20px 18px 16px;
+  gap: 10px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  width: 160px;
+  transition: border-color .2s, transform .2s, background .2s, box-shadow .2s;
+  backdrop-filter: blur(8px);
+}
+.home-show-btn:hover {
+  border-color: rgba(168,85,247,.5);
+  background: var(--surface-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(124,58,237,.2);
+}
+.home-show-btn img {
+  width: 100%;
+  max-height: 64px;
+  object-fit: contain;
+}
+.home-show-btn-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .95rem;
+  letter-spacing: .05em;
+  color: var(--text);
+  line-height: 1.2;
+}
+.home-show-btn-sub {
+  font-size: .68rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.home-show-season-pip {
+  display: inline-block;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: #fff;
+}
+
+/* ════════════════════════════════════════════════
+   HOME — CHANNEL CIRCLES (centered row)
+════════════════════════════════════════════════ */
+.home-channels-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px;
+}
+
+.home-channel-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  width: 80px;
+}
+.home-channel-circle-img {
+  width: 64px;
+  min-width: 64px;
+  max-width: 64px;
+  height: 64px;
+  min-height: 64px;
+  max-height: 64px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+  flex-shrink: 0;
+}
+.home-channel-circle:hover .home-channel-circle-img {
+  border-color: var(--purple-mid);
+  transform: scale(1.1);
+  box-shadow: 0 0 18px rgba(168,85,247,.3);
+}
+.home-channel-circle-img img {
+  width: 42px;
+  min-width: 42px;
+  max-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  max-height: 42px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter: brightness(.85);
+  transition: filter .2s;
+}
+.home-channel-circle:hover .home-channel-circle-img img { filter: brightness(1.1); }
+.home-channel-circle-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .78rem;
+  letter-spacing: .04em;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.2;
+  transition: color .18s;
+}
+.home-channel-circle:hover .home-channel-circle-label { color: var(--text); }
+
+/* ════════════════════════════════════════════════
+   HOME — SOCIAL CIRCLES (centered row)
+════════════════════════════════════════════════ */
+.home-socials-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px;
+}
+
+.home-social-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  width: 80px;
+}
+.home-social-circle-img {
+  width: 64px;
+  min-width: 64px;
+  max-width: 64px;
+  height: 64px;
+  min-height: 64px;
+  max-height: 64px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.home-social-circle:hover .home-social-circle-img {
+  border-color: var(--purple-mid);
+  transform: scale(1.1);
+  box-shadow: 0 0 18px rgba(168,85,247,.3);
+}
+.home-social-circle-img img {
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  max-height: 28px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter: invert(1) brightness(.85);
+  transition: filter .2s;
+}
+.home-social-circle:hover .home-social-circle-img img { filter: invert(1) brightness(1.1); }
+.home-social-circle-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .78rem;
+  letter-spacing: .04em;
+  color: var(--muted);
+  text-align: center;
+  transition: color .18s;
+}
+.home-social-circle:hover .home-social-circle-label { color: var(--text); }
+
+/* HOME — merch banner */
+.home-merch-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 32px;
+  text-decoration: none;
+  color: inherit;
+  flex-wrap: wrap;
+}
+.home-merch-banner h3 { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:.05em; }
+.home-merch-banner p  { color: var(--muted); font-size: .9rem; }
+
+/* ════════════════════════════════════════════════
+   SHOWS PAGE — full-column rows
+════════════════════════════════════════════════ */
+.show-column {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 28px;
+  min-height: 300px;
+  transition: border-color .2s;
+}
+.show-column:hover { border-color: rgba(168,85,247,.4); }
+
+.show-poster {
+  width: 240px; min-width: 240px; max-width: 240px; flex-shrink: 0;
+  background: #0d0b15;
+  display: flex; align-items: center; justify-content: center;
+  padding: 28px 20px;
+}
+.show-poster img { width: 160px; max-width: 160px; max-height: 200px; object-fit: contain; display: block; }
+
+.show-info {
+  flex: 1; padding: 32px 28px;
+  display: flex; flex-direction: column;
+  gap: 12px; justify-content: center;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+.show-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:.05em; line-height:1; }
+
+.season-pill {
+  display: inline-flex;
+  align-items: center; gap: 6px;
+  width: fit-content;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg,rgba(124,58,237,.25),rgba(217,70,239,.25));
+  border: 1px solid rgba(168,85,247,.4);
+  font-size: .78rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--purple-mid);
+  margin-bottom: 4px;
+}
+
+.show-info p { color: var(--muted); font-size: .93rem; max-width: 420px; }
+
+.show-watch-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  color: var(--purple-mid);
+  font-size: .82rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: .02em;
+  transition: color .18s;
+  width: fit-content;
+}
+.show-watch-link:hover { color: var(--text); }
+
+.collab-tag { font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--pink); }
+
+.status-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 13px; border-radius: 20px;
+  font-size: .78rem; font-weight: 600; letter-spacing: .04em;
+  width: fit-content; border: 1px solid transparent;
+}
+.status-badge .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.status-finished   { background:rgba(34,197,94,.1);   border-color:rgba(34,197,94,.3);   color:#4ade80; }
+.status-finished .dot   { background:#4ade80; }
+.status-development{ background:rgba(251,191,36,.1);  border-color:rgba(251,191,36,.3);  color:#fbbf24; }
+.status-development .dot{ background:#fbbf24; animation:pulse 1.6s infinite; }
+.status-ongoing    { background:rgba(99,202,183,.1);  border-color:rgba(99,202,183,.3);  color:#63cab7; }
+.status-ongoing .dot    { background:#63cab7; animation:pulse 1.6s infinite; }
+.status-tba        { background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.2); color:#94a3b8; }
+.status-tba .dot   { background:#94a3b8; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+.show-character {
+  width: 200px; flex-shrink: 0;
+  display: flex; align-items: flex-end; justify-content: center;
+  background: linear-gradient(180deg,rgba(124,58,237,.06) 0%,rgba(217,70,239,.08) 100%);
+  overflow: hidden;
+}
+.show-character img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+
+/* ════════════════════════════════════════════════
+   GAMES PAGE
+════════════════════════════════════════════════ */
+.game-column {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 28px;
+  min-height: 180px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .2s, transform .2s, background .2s;
+}
+.game-column:hover {
+  border-color: rgba(168,85,247,.45);
+  background: var(--surface-hover);
+  transform: translateY(-2px);
+}
+
+.game-icon-wrap {
+  width: 160px; min-width: 160px; max-width: 160px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #0d0b15;
+  padding: 28px 20px;
+  border-right: 1px solid var(--border);
+}
+.game-icon-wrap img {
+  width: 80px; height: 80px;
+  object-fit: contain; display: block;
+  filter: brightness(.85);
+  transition: filter .2s;
+}
+.game-column:hover .game-icon-wrap img { filter: brightness(1.1); }
+
+/* Generic game icon fallback */
+.game-icon-fallback {
+  width: 72px; height: 72px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  font-size: 2.2rem;
+}
+
+.game-info {
+  flex: 1; padding: 28px 28px;
+  display: flex; flex-direction: column;
+  gap: 10px; justify-content: center;
+}
+.game-title { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:.05em; line-height:1; }
+.game-desc { color: var(--muted); font-size: .93rem; max-width: 520px; line-height: 1.6; }
+.game-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .72rem; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--purple-mid);
+}
+.game-tag::before { content:'▶'; font-size:.6rem; }
+
+/* Scratch sub-page */
+.scratch-accounts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.scratch-card {
+  display: flex; flex-direction: column;
+  text-decoration: none; color: inherit;
+  padding: 24px 20px; gap: 10px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color .2s, transform .2s, background .2s;
+  backdrop-filter: blur(8px);
+}
+.scratch-card:hover {
+  border-color: rgba(168,85,247,.45);
+  background: var(--surface-hover);
+  transform: translateY(-3px);
+}
+.scratch-card-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg,var(--purple),var(--pink));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.scratch-card h3 { font-family:'Bebas Neue',sans-serif; font-size:1.15rem; letter-spacing:.05em; }
+.scratch-card p  { color:var(--muted); font-size:.83rem; line-height:1.5; }
+
+/* ════════════════════════════════════════════════
+   CHANNELS PAGE
+════════════════════════════════════════════════ */
+.channels-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.channel-row-card {
+  display: flex; align-items: center; gap: 18px;
+  padding: 20px 22px;
+  text-decoration: none; color: inherit;
+  border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: border-color .2s, transform .2s, background .2s;
+}
+.channel-row-card:hover {
+  border-color: rgba(168,85,247,.4);
+  background: var(--surface-hover);
+  transform: translateY(-2px);
+}
+.channel-row-card-logo { width:48px; max-width:48px; height:30px; object-fit:contain; flex-shrink:0; filter:brightness(.88); transition:filter .2s; }
+.channel-row-card:hover .channel-row-card-logo { filter: brightness(1.1); }
+.channel-row-card-text { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.channel-row-card-name { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.05em; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.channel-row-card-handle { font-size:.72rem; color:var(--purple-mid); font-weight:600; letter-spacing:.04em; }
+.channel-row-card-desc { font-size:.8rem; color:var(--muted); line-height:1.4; margin-top:2px; }
+
+/* ════════════════════════════════════════════════
+   SOCIALS PAGE
+════════════════════════════════════════════════ */
+.socials-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.social-row-card {
+  display: flex; align-items: center; gap: 18px;
+  padding: 20px 22px;
+  text-decoration: none; color: inherit;
+  border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: border-color .2s, transform .2s, background .2s;
+}
+.social-row-card:hover { border-color:rgba(168,85,247,.4); background:var(--surface-hover); transform:translateY(-2px); }
+.social-row-card-icon {
+  width:48px; height:48px; border-radius:50%;
+  background:rgba(255,255,255,.06); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.social-row-card-icon img { width:26px; height:26px; object-fit:contain; filter:invert(1); }
+.social-row-card-text { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.social-row-card-name { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.05em; color:var(--text); }
+.social-row-card-handle { font-size:.72rem; color:var(--purple-mid); font-weight:600; letter-spacing:.04em; }
+.social-row-card-desc { font-size:.8rem; color:var(--muted); line-height:1.4; margin-top:2px; }
+
+/* ════════════════════════════════════════════════
+   MERCH PAGE
+════════════════════════════════════════════════ */
+.merch-hero { display:flex; align-items:center; gap:36px; padding:36px; margin-bottom:40px; flex-wrap:wrap; }
+.merch-hero-img { width:200px; height:200px; object-fit:cover; border-radius:10px; flex-shrink:0; }
+.merch-hero-copy { flex:1; min-width:200px; display:flex; flex-direction:column; gap:10px; }
+.merch-hero-copy h2 { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:.06em; line-height:1; }
+.merch-hero-copy p { color:var(--muted); font-size:.95rem; }
+.merch-hero-copy ul { list-style:none; display:flex; flex-direction:column; gap:6px; }
+.merch-hero-copy ul li { color:var(--muted); font-size:.88rem; padding-left:16px; position:relative; }
+.merch-hero-copy ul li::before { content:'▸'; position:absolute; left:0; color:var(--purple-mid); }
+
+.merch-gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+.merch-item { display:flex; flex-direction:column; overflow:hidden; text-decoration:none; color:inherit; }
+.merch-item-img-wrap { aspect-ratio:1/1; background:#111; overflow:hidden; }
+.merch-item-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s; }
+.merch-item:hover .merch-item-img-wrap img { transform:scale(1.04); }
+.merch-item-label { display:none; }
+
+.catalog-cta { display:flex; flex-direction:column; align-items:center; text-align:center; padding:36px 24px; gap:14px; }
+.catalog-cta p { color:var(--muted); font-size:.95rem; }
+
+/* ════════════════════════════════════════════════
+   TEAM PAGE
+════════════════════════════════════════════════ */
+.under-construction-banner {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 22px; border-radius:var(--radius);
+  background:rgba(251,191,36,.08); border:1px solid rgba(251,191,36,.3);
+  color:#fbbf24; font-size:.88rem; font-weight:600; margin-bottom:32px;
+}
+.under-construction-banner .uc-icon { font-size:1.4rem; }
+
+.team-column {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+  min-height: 240px;
+  transition: border-color .2s;
+  overflow: hidden;
+}
+.team-column:hover { border-color: rgba(168,85,247,.4); }
+
+.team-portrait {
+  width: 190px;
+  min-width: 190px;
+  max-width: 190px;
+  background: #0d0b15;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.team-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+.team-portrait-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center;
+  justify-content: center; font-size: 3.5rem;
+  color: var(--muted); opacity: .25;
+}
+
+.team-info {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  border-left: 1px solid var(--border);
+}
+
+.team-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.8rem; letter-spacing:.05em; line-height:1;
+}
+
+.team-meta-row {
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+
+.team-handle {
+  font-size:.78rem; color:var(--purple-mid); font-weight:600; text-decoration:none;
+}
+.team-handle:hover { color:var(--text); }
+
+.team-gender {
+  font-size:.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.08em; color:var(--muted);
+  padding:2px 9px; border-radius:10px;
+  border:1px solid var(--border); background:var(--surface);
+}
+
+.team-roles { display:flex; flex-wrap:wrap; gap:6px; }
+
+.role-badge {
+  display:inline-block; padding:3px 10px; border-radius:12px;
+  font-size:.72rem; font-weight:600; letter-spacing:.04em;
+  background:rgba(168,85,247,.1); border:1px solid rgba(168,85,247,.28);
+  color:var(--purple-mid);
+}
+
+.team-shows-label {
+  font-size:.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.09em; color:var(--muted);
+}
+
+.team-shows-list { display:flex; flex-wrap:wrap; gap:7px; }
+
+.team-show-chip {
+  display:flex; align-items:center; gap:6px;
+  padding:4px 10px 4px 5px; border-radius:20px;
+  background:var(--surface); border:1px solid var(--border);
+  font-size:.73rem; color:var(--muted); text-decoration:none;
+  transition:border-color .18s, color .18s;
+}
+.team-show-chip:hover { border-color:rgba(168,85,247,.4); color:var(--text); }
+.team-show-chip img {
+  width:24px; min-width:24px; max-width:24px;
+  height:14px; min-height:14px; max-height:14px;
+  object-fit:contain; display:block; flex-shrink:0;
+}
+
+.team-coming-soon {
+  border-radius:var(--radius); background:var(--surface);
+  border:1px solid var(--border); padding:28px 32px; margin-top:8px;
+}
+.team-coming-soon h3 {
+  font-family:'Bebas Neue',sans-serif; font-size:1.3rem;
+  letter-spacing:.07em; color:var(--muted); margin-bottom:16px;
+}
+.team-coming-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px;
+}
+.team-coming-pill {
+  display:flex; flex-direction:column; gap:2px;
+  padding:12px 16px; border-radius:10px;
+  background:rgba(255,255,255,.03); border:1px solid var(--border);
+}
+.team-coming-pill-name {
+  font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:.04em; color:var(--text);
+}
+.team-coming-pill-handle { font-size:.72rem; color:var(--muted); }
+.team-coming-pill-role { font-size:.7rem; color:var(--purple-mid); font-weight:600; }
+
+/* ════════════════════════════════════════════════
+   MERCH CAROUSEL
+════════════════════════════════════════════════ */
+.merch-carousel-wrap {
+  width:200px; min-width:200px; max-width:200px;
+  height:200px; min-height:200px; max-height:200px;
+  border-radius:10px; overflow:hidden; flex-shrink:0; position:relative;
+}
+.merch-carousel-wrap img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  position:absolute; top:0; left:0;
+  opacity:0; transition:opacity .6s ease;
+}
+.merch-carousel-wrap img.carousel-active { opacity:1; }
+
+/* ════════════════════════════════════════════════
+   STREAM PAGE
+════════════════════════════════════════════════ */
+
+/* ── Masthead: top link to the stream site ─────────────────── */
+.stream-masthead {
+  display:flex; align-items:center; gap:18px; padding:22px 28px;
+  margin-bottom:24px; text-decoration:none; color:inherit;
+  transition:border-color .2s, background .2s, transform .2s;
+}
+.stream-masthead:hover { border-color:rgba(168,85,247,.4); background:var(--surface-hover); transform:translateY(-2px); }
+.stream-masthead img { height:44px; width:auto; flex-shrink:0; }
+.stream-masthead-text { display:flex; flex-direction:column; gap:2px; }
+.stream-masthead-text strong { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:.05em; }
+.stream-masthead-text span { font-size:.82rem; color:var(--muted); }
+.stream-masthead-arrow { margin-left:auto; font-size:1.3rem; color:var(--purple-mid); flex-shrink:0; }
+
+.stream-hero { display:flex; align-items:center; gap:36px; padding:36px; margin-bottom:40px; flex-wrap:wrap; }
+.stream-hero-copy { flex:1; min-width:220px; display:flex; flex-direction:column; gap:10px; }
+.stream-hero-copy h2 { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:.06em; line-height:1; }
+.stream-hero-copy p { color:var(--muted); font-size:.95rem; }
+.stream-hero-copy ul { list-style:none; display:flex; flex-direction:column; gap:6px; }
+.stream-hero-copy ul li { color:var(--muted); font-size:.88rem; padding-left:16px; position:relative; }
+.stream-hero-copy ul li::before { content:'▸'; position:absolute; left:0; color:var(--purple-mid); }
+
+.stream-hero-visual {
+  width:320px; min-width:320px; max-width:320px;
+  aspect-ratio:16/9;
+  border-radius:10px; overflow:hidden; flex-shrink:0; position:relative;
+  border:1px solid var(--border);
+  background:radial-gradient(circle at 30% 20%, rgba(168,85,247,.18), transparent 60%),
+             radial-gradient(circle at 80% 80%, rgba(236,72,153,.14), transparent 55%),
+             #111;
+  display:flex; align-items:center; justify-content:center;
+}
+.stream-hero-visual img { width:56%; max-width:170px; object-fit:contain; opacity:.92; }
+
+/* ── Shows: poster buttons ──────────────────────────────────── */
+.stream-shows-head { margin-bottom:18px; }
+.stream-shows-head h2 { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.06em; color:var(--text); }
+.stream-shows-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; margin-bottom:40px; }
+.stream-show-card {
+  display:block; aspect-ratio:2/3; border-radius:10px; overflow:hidden;
+  position:relative; border:1px solid var(--border); background:#111;
+  text-decoration:none;
+}
+.stream-show-card img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s; }
+.stream-show-card:hover img { transform:scale(1.05); }
+
+/* ── Recent uploads / recent animations ─────────────────────── */
+.stream-uploads { padding:28px 28px 32px; }
+.stream-uploads-head {
+  display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  flex-wrap:wrap; margin-bottom:18px;
+}
+.stream-uploads-head h2 { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.06em; color:var(--text); }
+.stream-uploads-link { font-size:.8rem; font-weight:600; color:var(--purple-mid); text-decoration:none; white-space:nowrap; }
+.stream-uploads-link:hover { color:var(--pink); }
+.stream-uploads-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.stream-upload-card {
+  display:flex; flex-direction:column; gap:8px;
+  text-decoration:none; color:inherit;
+  border:1px solid var(--border); border-radius:10px;
+  padding:8px; background:rgba(255,255,255,.02);
+  transition:border-color .2s, background .2s, transform .2s;
+}
+.stream-upload-card:hover { border-color:rgba(168,85,247,.4); background:var(--surface-hover); transform:translateY(-2px); }
+.stream-upload-thumb {
+  aspect-ratio:16/9; border-radius:6px; overflow:hidden;
+  background:#111; display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.stream-upload-thumb img { width:62%; object-fit:contain; opacity:.9; }
+.stream-upload-thumb.stream-upload-thumb-video img { width:100%; height:100%; object-fit:cover; opacity:1; }
+.stream-upload-thumb::after {
+  content:'▶'; position:absolute; bottom:6px; right:8px;
+  font-size:.6rem; color:rgba(255,255,255,.55);
+}
+.stream-upload-info { display:flex; flex-direction:column; gap:2px; padding:0 2px; }
+.stream-upload-title { font-size:.8rem; font-weight:600; color:var(--text); line-height:1.3; }
+.stream-upload-meta { font-size:.7rem; color:var(--muted); }
+.stream-uploads-empty { color:var(--muted); font-size:.85rem; padding:8px 2px; grid-column:1/-1; }
+
+/* ── Home page: compact recent-animations row ───────────────── */
+.home-stream-animations { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px; }
+.home-stream-animations .stream-upload-card { padding:6px; }
+.home-stream-animations .stream-upload-title { font-size:.74rem; }
+.home-stream-animations .stream-upload-meta { font-size:.65rem; }
+
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════ */
+@media (max-width: 1000px) {
+  .channels-list { grid-template-columns:repeat(2,1fr); }
+  .socials-list  { grid-template-columns:repeat(2,1fr); }
+  .scratch-accounts { grid-template-columns:repeat(2,1fr); }
+  .team-coming-grid { grid-template-columns:repeat(3,1fr); }
+  .stream-uploads-grid { grid-template-columns:repeat(2,1fr); }
+  .stream-shows-grid { grid-template-columns:repeat(3,1fr); }
+  .home-stream-animations { grid-template-columns:repeat(2,1fr); }
+}
+
+@media (max-width: 780px) {
+  .show-character { display:none; }
+  .show-poster { width:160px; }
+  .merch-gallery { grid-template-columns:repeat(2,1fr); }
+  .team-portrait { width:140px; min-width:140px; max-width:140px; }
+}
+
+@media (max-width: 680px) {
+  :root { --header-h: 56px; }
+  header { padding:0 14px; }
+  .header-brand img { height:26px; }
+  .header-brand span { font-size:1.1rem; }
+
+  /* Mobile hamburger */
+  .nav-toggle { display:flex; }
+  .nav-list {
+    display:none;
+    position:absolute;
+    top:calc(100% + 8px);
+    right:0;
+    min-width:200px;
+    background:rgba(10,7,18,0.98);
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:8px;
+    flex-direction:column;
+    gap:2px;
+    z-index:300;
+  }
+  .nav-list.nav-open { display:flex; }
+  .nav-list > li { position:static; }
+  nav a { padding:9px 12px; font-size:.84rem; }
+  .nav-dropdown {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    padding-top: 0;
+    background: transparent;
+    display: none;
+  }
+  .nav-dropdown-inner {
+    background: rgba(255,255,255,.04);
+    border: none;
+    border-radius: 8px;
+    padding: 4px 4px 4px 16px;
+    margin-top: 2px;
+  }
+  .nav-dropdown-inner::before { display: none; }
+  .nav-has-dropdown.mobile-open .nav-dropdown { display: flex; }
+  .nav-has-dropdown > a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+  }
+  /* Arrow toggle button — only visible on mobile */
+  .nav-drop-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: .75rem;
+    transition: background .15s, color .15s;
+    margin-left: auto;
+  }
+  .nav-drop-toggle:hover { background: var(--surface-hover); color: var(--text); }
+  .nav-has-dropdown.mobile-open .nav-drop-toggle { color: var(--purple-mid); border-color: rgba(168,85,247,.4); }
+  /* Make the nav-chevron inside <a> hidden on mobile since arrow button replaces it */
+  .nav-has-dropdown > a .nav-chevron { display: none; }
+  /* Each nav-has-dropdown row is a flex row with link + toggle */
+  .nav-has-dropdown {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .nav-has-dropdown .nav-dropdown { width: 100%; }
+  .nav-has-dropdown > a { flex: 1; min-width: 0; }
+  .nav-chevron { margin-left: auto; }
+
+  .page { padding-left:14px; padding-right:14px; padding-top:calc(var(--header-h) + 28px); padding-bottom:48px; }
+
+  .hero { padding:36px 16px 28px; gap:10px; }
+  .hero-logo { width:110px; }
+  .hero h2 { font-size:2rem; }
+
+  .home-shows-grid { gap:10px; }
+  .home-show-btn { width:140px; padding:16px 12px 12px; }
+  .home-show-btn img { max-height:52px; }
+
+  .home-channels-row, .home-socials-row { gap:14px; }
+  .home-channel-circle, .home-social-circle { width:64px; }
+  .home-channel-circle-img, .home-social-circle-img { width:52px; height:52px; }
+  .home-channel-circle-img img { width:34px; height:34px; }
+  .home-social-circle-img img { width:22px; height:22px; }
+
+  .section-label { font-size:1.6rem; }
+  .divider { margin:24px 0; }
+  .section-block { margin-bottom:36px; }
+
+  .show-column { flex-direction:column; min-height:unset; }
+  .show-poster { width:100%; padding:20px; }
+  .show-poster img { max-height:140px; }
+  .show-info { border-left:none; border-right:none; border-top:1px solid var(--border); padding:20px 18px; }
+  .show-title { font-size:1.6rem; }
+
+  .game-column { flex-direction:column; }
+  .game-icon-wrap { width:100%; padding:20px; border-right:none; border-bottom:1px solid var(--border); }
+  .game-info { padding:20px 18px; }
+  .game-title { font-size:1.5rem; }
+
+  .channels-list, .socials-list { grid-template-columns:1fr; gap:10px; }
+  .scratch-accounts { grid-template-columns:1fr; }
+
+  .merch-hero { padding:20px; gap:18px; flex-direction:column; }
+  .merch-hero-img { width:100%; height:180px; }
+  .merch-hero-copy h2 { font-size:1.8rem; }
+  .stream-hero { padding:20px; gap:18px; flex-direction:column; }
+  .stream-hero-visual { width:100%; max-width:100%; }
+  .stream-hero-copy h2 { font-size:1.8rem; }
+  .stream-uploads { padding:20px; }
+  .stream-uploads-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .stream-masthead { padding:16px 18px; gap:12px; }
+  .stream-masthead img { height:34px; }
+  .stream-masthead-text strong { font-size:1.1rem; }
+  .stream-shows-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .merch-gallery { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .home-merch-banner { padding:18px 20px; gap:14px; }
+  .home-merch-banner h3 { font-size:1.3rem; }
+}
+
+/* ════════════════════════════════════════════════
+   MUSIC PAGE
+════════════════════════════════════════════════ */
+
+/* Artist hero */
+.music-artist-hero {
+  display: flex;
+  gap: 40px;
+  padding: 36px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.music-artist-info { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 12px; }
+
+.music-artist-tag {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--purple-mid);
+}
+
+.music-artist-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.6rem;
+  letter-spacing: .06em;
+  line-height: 1;
+}
+
+.music-artist-desc { color: var(--muted); font-size: .92rem; max-width: 460px; }
+.music-artist-desc strong { color: var(--text); }
+
+.music-stat-row {
+  display: flex;
+  gap: 28px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.music-stat { display: flex; flex-direction: column; gap: 2px; }
+
+.music-stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: .04em;
+  background: linear-gradient(90deg, var(--purple-mid), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.music-stat-label { font-size: .75rem; color: var(--muted); font-weight: 500; }
+
+/* Platform links */
+.music-artist-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 180px;
+}
+
+.music-artist-links h4 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .9rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+
+.music-platform-circles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.music-platform-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  width: 68px;
+}
+
+.music-platform-circle-img {
+  width: 56px;
+  min-width: 56px;
+  max-width: 56px;
+  height: 56px;
+  min-height: 56px;
+  max-height: 56px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.music-platform-circle:hover .music-platform-circle-img {
+  border-color: var(--purple-mid);
+  transform: scale(1.1);
+  box-shadow: 0 0 18px rgba(168,85,247,.3);
+}
+.music-platform-circle-img svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: color .2s;
+}
+.music-platform-circle:hover .music-platform-circle-img svg { color: var(--text); }
+
+.music-platform-circle-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .78rem;
+  letter-spacing: .04em;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.2;
+  transition: color .18s;
+}
+.music-platform-circle:hover .music-platform-circle-label { color: var(--text); }
+
+/* Top track */
+.music-track-hero {
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.music-track-info { display: flex; flex-direction: column; gap: 8px; }
+
+.music-track-label {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--purple-mid);
+}
+
+.music-track-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: .05em;
+  line-height: 1;
+}
+
+.music-track-streams {
+  font-size: 1rem;
+  color: var(--muted);
+}
+.music-track-streams span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: var(--text);
+  letter-spacing: .04em;
+}
+
+.music-track-meta { font-size: .82rem; color: var(--muted); }
+.music-track-meta em { color: var(--purple-mid); font-style: normal; }
+
+/* Release rows */
+.music-release {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 20px;
+  min-height: 160px;
+}
+
+.music-release-art {
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 14px;
+  border-radius: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .85rem;
+  letter-spacing: .05em;
+  color: rgba(255,255,255,.7);
+  line-height: 1.2;
+}
+
+/* Unique gradient per release */
+.music-art-dip { background: linear-gradient(135deg, #1a0533 0%, #4c1d95 50%, #7c3aed 100%); }
+.music-art-pu  { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0ea5e9 100%); }
+.music-art-sos { background: linear-gradient(135deg, #1a0f0f 0%, #7f1d1d 50%, #d946ef 100%); }
+
+.music-release-info {
+  flex: 1;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  border-left: 1px solid var(--border);
+}
+
+.music-release-type {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--purple-mid);
+}
+
+.music-release-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: .05em;
+  line-height: 1;
+}
+
+.music-release-artist { font-size: .78rem; color: var(--muted); font-weight: 500; }
+.music-release-desc { font-size: .85rem; color: var(--muted); max-width: 440px; }
+
+.music-release-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.music-link-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: .76rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  transition: border-color .18s, background .18s, color .18s;
+}
+.music-link-pill:hover { border-color: rgba(168,85,247,.5); background: rgba(168,85,247,.1); color: var(--text); }
+
+.music-link-spotify { color: #1ed760; border-color: rgba(30,215,96,.25); }
+.music-link-apple   { color: #fc3d39; border-color: rgba(252,61,57,.25); }
+.music-link-yt      { color: #ff4e45; border-color: rgba(255,0,0,.2); }
+
+@media (max-width: 680px) {
+  .music-artist-hero { padding: 20px; gap: 20px; flex-direction: column; }
+  .music-artist-name { font-size: 2rem; }
+  .music-artist-links { width: 100%; }
+  .music-platform-circles { justify-content: center; }
+  .music-track-hero { padding: 20px; }
+  .music-release { flex-direction: column; }
+  .music-release-art { width: 100%; min-width: unset; max-width: unset; height: 80px; border-radius: 0; }
+  .music-release-info { border-left: none; border-top: 1px solid var(--border); padding: 18px 20px; }
+}
+
+/* Home contact block */
+.home-contact-block {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 32px;
+  flex-wrap: wrap;
+}
+.home-contact-icon {
+  font-size: 2.4rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.home-contact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.home-contact-text h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: .05em;
+}
+.home-contact-text p {
+  color: var(--muted);
+  font-size: .88rem;
+  max-width: 520px;
+}
+
+/* ════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════ */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  background: rgba(10,7,16,0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 48px 24px 32px;
+}
+
+.footer-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 28px 20px;
+  margin-bottom: 40px;
+}
+
+/* Brand column */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.footer-brand-logo img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+.footer-brand-logo span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: .08em;
+  color: var(--text);
+}
+.footer-brand p {
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.6;
+  max-width: 200px;
+}
+
+/* Footer nav columns */
+.footer-col h4 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .95rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-col ul li a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .82rem;
+  font-weight: 500;
+  transition: color .18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.footer-col ul li a:hover { color: var(--text); }
+
+.footer-col ul li a .footer-ext-icon {
+  font-size: .65rem;
+  opacity: .5;
+}
+
+/* Social icons row */
+.footer-socials {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.footer-social-icon {
+  width: 34px;
+  min-width: 34px;
+  max-width: 34px;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: border-color .18s, transform .18s;
+}
+.footer-social-icon:hover {
+  border-color: var(--purple-mid);
+  transform: translateY(-2px);
+}
+.footer-social-icon img {
+  width: 16px;
+  min-width: 16px;
+  max-width: 16px;
+  height: 16px;
+  min-height: 16px;
+  max-height: 16px;
+  object-fit: contain;
+  display: block;
+  filter: invert(1) brightness(.8);
+  transition: filter .18s;
+}
+.footer-social-icon:hover img { filter: invert(1) brightness(1.1); }
+
+/* Bottom bar */
+.footer-bottom {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer-bottom p {
+  color: var(--muted);
+  font-size: .74rem;
+}
+.footer-bottom a {
+  color: var(--muted);
+  font-size: .74rem;
+  text-decoration: none;
+  transition: color .18s;
+}
+.footer-bottom a:hover { color: var(--purple-mid); }
+
+@media (max-width: 900px) {
+  .footer-inner { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+@media (max-width: 780px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+  .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
+
+@media (max-width: 380px) {
+  .header-brand span { display:none; }
+  nav a { padding:5px 5px; font-size:.7rem; }
+  .home-show-btn { width:120px; }
+  .merch-gallery { grid-template-columns:1fr; }
+}

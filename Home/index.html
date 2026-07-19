@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="canonical" href="https://twechon.com/Home">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twechon — Home</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/verzeefavicon.png">
+  <link rel="stylesheet" href="/styles.css">  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <!-- Open Graph / Discord embed -->
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="Twechon">
+  <meta property="og:url"         content="https://twechon.com/Home">
+  <meta property="og:title"       content="The Official Twechon Site!">
+  <meta property="og:description" content="Animations, shows, music, and more! Join our community, today.">
+  <meta property="og:image"       content="https://twechon.com/assets/embed.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height"content="630">
+  <!-- Twitter card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="The Official Twechon Site!">
+  <meta name="twitter:description" content="Animations, shows, music, and more! Join our community, today.">
+  <meta name="twitter:image"       content="https://twechon.com/assets/embed.png">
+  <meta name="description"         content="Animations, shows, music, and more! Join our community, today.">
+</head>
+<body>
+
+  <!-- Dynamic star canvas -->
+  <canvas id="star-canvas"></canvas>
+
+  <header>
+    <div class="header-inner">
+      <a class="header-brand" href="/Home/">
+        <img src="/assets/twechon.png" alt="Twechon logo">
+        <span>Twechon</span>
+      </a>
+            <nav>
+        <button class="nav-toggle" aria-label="Toggle menu" id="nav-toggle-btn"><span></span><span></span><span></span></button>
+        <ul class="nav-list" id="nav-list">
+        <li class="nav-item">
+          <a href="/Home/" class="active"><img class="nav-icon" src="/assets/home.png" alt=""><span>Home</span></a>
+        </li>
+        <li class="nav-item">
+          <a href="/Stream/"><img class="nav-icon" src="/assets/twechonstreamsmalllogo.png" alt=""><span>Stream</span></a>
+        </li>
+        <li class="nav-item nav-has-dropdown">
+          <a href="/Shows/"><img class="nav-icon" src="/assets/shows.png" alt=""><span>Shows</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">            <a href="/Shows/#rs1">Reality Shift S01</a>
+            <a href="/Shows/#rs2">Reality Shift S02</a>
+            <a href="/Shows/#sticky">Sticky</a>
+            <a href="/Shows/#mamflux">Mamflux</a>
+            <a href="/Shows/#mrb">My Reflections Bleed</a>
+            <a href="/Shows/#sketchsquad">Sketchsquad</a>
+                      </div>
+          </div>
+          <button class="nav-drop-toggle" aria-label="Open submenu">›</button>
+        </li>
+        <li class="nav-item nav-has-dropdown">
+          <a href="/Channels/"><img class="nav-icon" src="/assets/channels.png" alt=""><span>Channels</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">            <a href="https://youtube.com/@twechon" target="_blank" rel="noopener noreferrer">Twechon</a>
+            <a href="https://youtube.com/@cosmicframeprod" target="_blank" rel="noopener noreferrer">Cosmic Frame</a>
+            <a href="https://youtube.com/@twechonvr" target="_blank" rel="noopener noreferrer">Twechon VR</a>
+            <a href="https://youtube.com/@twechongaming" target="_blank" rel="noopener noreferrer">Twechon Gaming</a>
+            <a href="https://youtube.com/@twechonextras" target="_blank" rel="noopener noreferrer">Twechon Extras</a>
+            <a href="https://youtube.com/@twechontunes" target="_blank" rel="noopener noreferrer">Twechon Tunes</a>
+            <a href="https://youtube.com/@twechoncraft" target="_blank" rel="noopener noreferrer">Twechon Craft</a>
+                      </div>
+          </div>
+          <button class="nav-drop-toggle" aria-label="Open submenu">›</button>
+        </li>
+        <li class="nav-item nav-has-dropdown">
+          <a href="/Socials/"><img class="nav-icon" src="/assets/socials.png" alt=""><span>Socials</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">            <a href="https://discord.com/invite/7hJv59SNyZ" target="_blank" rel="noopener noreferrer">Discord</a>
+            <a href="https://www.tiktok.com/@liampars15" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://www.twitch.tv/notverzee" target="_blank" rel="noopener noreferrer">Twitch</a>
+            <a href="https://x.com/notverzee" target="_blank" rel="noopener noreferrer">X</a>
+                      </div>
+          </div>
+          <button class="nav-drop-toggle" aria-label="Open submenu">›</button>
+        </li>
+        <li class="nav-item nav-has-dropdown">
+          <a href="/Games/"><img class="nav-icon" src="/assets/games.png" alt=""><span>Games</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">            <a href="/Games/CookieClicker/">🍪 Cookie Clicker</a>
+            <a href="/Games/Minesweeper/">💣 Minesweeper</a>
+            <a href="/Games/Scratch/">🐱 Scratch Collection</a>
+            <a href="https://github.com/notverzee/Univerzal-Adventure/releases/tag/v4.0.0" target="_blank" rel="noopener noreferrer">🌌 Univerzal Adventure ↗</a>
+                      </div>
+          </div>
+          <button class="nav-drop-toggle" aria-label="Open submenu">›</button>
+        </li>
+        <li class="nav-item nav-has-dropdown">
+          <a href="/Music/"><img class="nav-icon" src="/assets/music.png" alt=""><span>Music</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">            <a href="https://open.spotify.com/artist/1lT94P02R3vJTk9vLznNYB?si=d34gyCjsRJ-aAFFN_a2CWQ" target="_blank" rel="noopener noreferrer">Spotify</a>
+            <a href="https://music.apple.com/us/artist/verze/472169188" target="_blank" rel="noopener noreferrer">Apple Music</a>
+            <a href="https://music.youtube.com/@twechontunes?si=wCdcNUCgDSnHV_kA" target="_blank" rel="noopener noreferrer">YouTube Music</a>
+            <a href="https://youtube.com/@twechontunes" target="_blank" rel="noopener noreferrer">Twechon Tunes</a>
+                      </div>
+          </div>
+          <button class="nav-drop-toggle" aria-label="Open submenu">›</button>
+        </li>
+        <li class="nav-item">
+          <a href="/Team/"><img class="nav-icon" src="/assets/team.png" alt=""><span>Team</span></a>
+        </li>
+        <li class="nav-item nav-has-dropdown">
+          <a href="/Merch/"><img class="nav-icon" src="/assets/merch.png" alt=""><span>Merch</span><svg class="nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">            <a href="https://merch.twechon.com" target="_blank" rel="noopener noreferrer">Visit Store</a>
+            <a href="https://merch.twechon.com/collections/all" target="_blank" rel="noopener noreferrer">Full Catalog</a>
+                      </div>
+          </div>
+          <button class="nav-drop-toggle" aria-label="Open submenu">›</button>
+        </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- Hero -->
+    <section class="hero fade-up section-block">
+      <img class="hero-logo" src="/assets/twechon.png" alt="Twechon">
+      <h2>Welcome to Twechon</h2>
+      <p>Animations, original series, games, and a community worth being part of. Explore shows, find your channel, and come hang.</p>
+    </section>
+
+    <!-- Featured Shows -->
+    <section class="section-block reveal">
+      <h2 class="section-label">Featured Shows</h2>
+      <div class="home-shows-grid">
+
+        <a class="home-show-btn fade-up" href="/Shows/#rs1">
+          <img src="/assets/realityshiftlogo.png" alt="Reality Shift S01">
+          <span class="home-show-season-pip">Season 1</span>
+          <span class="home-show-btn-name">Reality Shift</span>
+          <span class="home-show-btn-sub">Finished</span>
+        </a>
+
+        <a class="home-show-btn fade-up" href="/Shows/#rs2">
+          <img src="/assets/realityshifts02logo.png" alt="Reality Shift S02">
+          <span class="home-show-season-pip">Season 2</span>
+          <span class="home-show-btn-name">Reality Shift</span>
+          <span class="home-show-btn-sub">In Development</span>
+        </a>
+
+        <a class="home-show-btn fade-up" href="/Shows/#sticky">
+          <img src="/assets/stickylogo.png" alt="Sticky">
+          <span class="home-show-btn-name">Sticky</span>
+          <span class="home-show-btn-sub">Complete</span>
+        </a>
+
+        <a class="home-show-btn fade-up" href="/Shows/#mamflux">
+          <img src="/assets/mamfluxlogo.png" alt="Mamflux">
+          <span class="home-show-btn-name">Mamflux</span>
+          <span class="home-show-btn-sub">TBA</span>
+        </a>
+
+        <a class="home-show-btn fade-up" href="/Shows/#mrb">
+          <img src="/assets/mrblogowhite.png" alt="My Reflections Bleed">
+          <span class="home-show-btn-name">My Reflections Bleed</span>
+          <span class="home-show-btn-sub">TBA</span>
+        </a>
+
+        <a class="home-show-btn fade-up" href="/Shows/#sketchsquad">
+          <img src="/assets/sketchsquadlogo.png" alt="Sketchsquad">
+          <span class="home-show-btn-name">Sketchsquad</span>
+          <span class="home-show-btn-sub">Ongoing</span>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Channels -->
+    <section class="section-block reveal">
+      <h2 class="section-label">Channels</h2>
+      <div class="home-channels-row">
+
+        <a class="home-channel-circle" href="https://youtube.com/@twechon" target="_blank" rel="noopener noreferrer">
+          <div class="home-channel-circle-img"><img src="/assets/twechon.png" alt="Twechon"></div>
+          <span class="home-channel-circle-label">Twechon</span>
+        </a>
+
+        <a class="home-channel-circle" href="https://youtube.com/@cosmicframeprod" target="_blank" rel="noopener noreferrer">
+          <div class="home-channel-circle-img"><img src="/assets/cosmicframelogowhite.png" alt="Cosmic Frame"></div>
+          <span class="home-channel-circle-label">Cosmic Frame</span>
+        </a>
+
+        <a class="home-channel-circle" href="https://youtube.com/@twechonvr" target="_blank" rel="noopener noreferrer">
+          <div class="home-channel-circle-img"><img src="/assets/twechonvr.png" alt="Twechon VR"></div>
+          <span class="home-channel-circle-label">VR</span>
+        </a>
+
+        <a class="home-channel-circle" href="https://youtube.com/@twechongaming" target="_blank" rel="noopener noreferrer">
+          <div class="home-channel-circle-img"><img src="/assets/twechongaming.png" alt="Twechon Gaming"></div>
+          <span class="home-channel-circle-label">Gaming</span>
+        </a>
+
+        <a class="home-channel-circle" href="https://youtube.com/@twechonextras" target="_blank" rel="noopener noreferrer">
+          <div class="home-channel-circle-img"><img src="/assets/twechonextras.png" alt="Twechon Extras"></div>
+          <span class="home-channel-circle-label">Extras</span>
+        </a>
+
+        <a class="home-channel-circle" href="https://youtube.com/@twechontunes" target="_blank" rel="noopener noreferrer">
+          <div class="home-channel-circle-img"><img src="/assets/twechontunes.png" alt="Twechon Tunes"></div>
+          <span class="home-channel-circle-label">Tunes</span>
+        </a>
+
+        <a class="home-channel-circle" href="https://youtube.com/@twechoncraft" target="_blank" rel="noopener noreferrer">
+          <div class="home-channel-circle-img"><img src="/assets/twechoncraft.png" alt="Twechon Craft"></div>
+          <span class="home-channel-circle-label">Craft</span>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Socials -->
+    <section class="section-block reveal">
+      <h2 class="section-label">Follow Me</h2>
+      <div class="home-socials-row">
+
+        <a class="home-social-circle" href="https://discord.com/invite/7hJv59SNyZ" target="_blank" rel="noopener noreferrer">
+          <div class="home-social-circle-img"><img src="/assets/discord-icon.png" alt="Discord"></div>
+          <span class="home-social-circle-label">Discord</span>
+        </a>
+
+        <a class="home-social-circle" href="https://www.tiktok.com/@liampars15" target="_blank" rel="noopener noreferrer">
+          <div class="home-social-circle-img"><img src="/assets/tiktok-icon.png" alt="TikTok"></div>
+          <span class="home-social-circle-label">TikTok</span>
+        </a>
+
+        <a class="home-social-circle" href="https://www.twitch.tv/notverzee" target="_blank" rel="noopener noreferrer">
+          <div class="home-social-circle-img"><img src="/assets/twitch-icon.png" alt="Twitch"></div>
+          <span class="home-social-circle-label">Twitch</span>
+        </a>
+
+        <a class="home-social-circle" href="https://x.com/notverzee" target="_blank" rel="noopener noreferrer">
+          <div class="home-social-circle-img"><img src="/assets/x-icon.png" alt="X"></div>
+          <span class="home-social-circle-label">X</span>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Merch Banner -->
+    <section class="section-block reveal">
+      <h2 class="section-label">Merch</h2>
+      <a class="card home-merch-banner" href="/Merch/">
+        <div>
+          <h3>Official Twechon Store</h3>
+          <p>Shirts, hoodies, mugs, posters — exclusive merch on FourthWall.</p>
+        </div>
+        <span class="btn-primary">Shop Now</span>
+      </a>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Stream Banner -->
+    <section class="section-block reveal">
+      <h2 class="section-label">Stream</h2>
+      <a class="card home-merch-banner" href="/Stream/">
+        <div>
+          <h3>Twechon Stream</h3>
+          <p>Live status and recent uploads from every channel, all in one place.</p>
+        </div>
+        <span class="btn-primary">Watch Now</span>
+      </a>
+      <div class="home-stream-animations" id="home-recent-animations" data-recent-animations data-limit="4">
+        <p class="stream-uploads-empty">Loading recent uploads…</p>
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+    <!-- Contact -->
+    <section class="section-block reveal">
+      <h2 class="section-label">Contact</h2>
+      <div class="card home-contact-block">
+        <div class="home-contact-icon">✉️</div>
+        <div class="home-contact-text">
+          <h3>support@twechon.com</h3>
+          <p>Reach out for website issues, copyright concerns, ideas, business opportunities, job applications, or any general questions.</p>
+          <a class="btn-outline" href="mailto:support@twechon.com" style="margin-top:8px;width:fit-content;">Send an Email</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+
+      <!-- Brand -->
+      <div class="footer-brand">
+        <a class="footer-brand-logo" href="/Home/">
+          <img src="/assets/twechon.png" alt="Twechon">
+          <span>Twechon</span>
+        </a>
+        <p>Animations, original series, games, and community content.</p>
+        <div class="footer-socials">
+          <a class="footer-social-icon" href="https://discord.com/invite/7hJv59SNyZ" target="_blank" rel="noopener noreferrer" title="Discord">
+            <img src="/assets/discord-icon.png" alt="Discord">
+          </a>
+          <a class="footer-social-icon" href="https://www.tiktok.com/@liampars15" target="_blank" rel="noopener noreferrer" title="TikTok">
+            <img src="/assets/tiktok-icon.png" alt="TikTok">
+          </a>
+          <a class="footer-social-icon" href="https://www.twitch.tv/notverzee" target="_blank" rel="noopener noreferrer" title="Twitch">
+            <img src="/assets/twitch-icon.png" alt="Twitch">
+          </a>
+          <a class="footer-social-icon" href="https://x.com/notverzee" target="_blank" rel="noopener noreferrer" title="X">
+            <img src="/assets/x-icon.png" alt="X">
+          </a>
+          <a class="footer-social-icon" href="https://youtube.com/@cosmicframeprod" target="_blank" rel="noopener noreferrer" title="YouTube">
+            <img src="/assets/youtube-icon.png" alt="YouTube">
+          </a>
+        </div>
+      </div>
+
+      <!-- Pages -->
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="/Home/">Home</a></li>
+          <li><a href="/Stream/">Stream</a></li>
+          <li><a href="/Shows/">Shows</a></li>
+          <li><a href="/Channels/">Channels</a></li>
+          <li><a href="/Socials/">Socials</a></li>
+          <li><a href="/Games/">Games</a></li>
+          <li><a href="/Music/">Music</a></li>
+          <li><a href="/Merch/">Merch</a></li>
+        </ul>
+      </div>
+
+      <!-- Games -->
+      <div class="footer-col">
+        <h4>Games</h4>
+        <ul>
+          <li><a href="/Games/CookieClicker/">Cookie Clicker</a></li>
+          <li><a href="/Games/Minesweeper/">Minesweeper</a></li>
+          <li><a href="https://github.com/notverzee/Univerzal-Adventure/releases/tag/v4.0.0" target="_blank" rel="noopener noreferrer">Univerzal Adventure <span class="footer-ext-icon">↗</span></a></li>
+          <li><a href="/Games/Scratch/">Scratch Collection</a></li>
+        </ul>
+      </div>
+
+      <!-- Old Sites -->
+      <div class="footer-col">
+        <h4>Old Sites</h4>
+        <ul>
+          <li><a href="https://verzee.neocities.org" target="_blank" rel="noopener noreferrer">verzee.neocities.org <span class="footer-ext-icon">↗</span></a></li>
+          <li><a href="https://twechon.carrd.co" target="_blank" rel="noopener noreferrer">twechon.carrd.co <span class="footer-ext-icon">↗</span></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:support@twechon.com">support@twechon.com</a></li>
+          <li style="color:var(--muted);font-size:.75rem;line-height:1.5;padding-top:4px;">Website issues · Copyright · Ideas<br>Business · Jobs · Questions</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Twechon. All rights reserved.</p>
+      <a href="https://youtube.com/@cosmicframeprod" target="_blank" rel="noopener noreferrer">youtube.com/@cosmicframeprod</a>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
+  <script>
+  // ── Star canvas ──────────────────────────────────────────────
+  (function() {
+    const canvas = document.getElementById('star-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, stars = [], nebulas = [];
+    const N_STARS = 220, N_NEBULA = 5;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+    function initStars() {
+      stars = Array.from({ length: N_STARS }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: randBetween(0.3, 1.8),
+        alpha: randBetween(0.2, 1),
+        alphaDir: Math.random() > 0.5 ? 1 : -1,
+        alphaSpeed: randBetween(0.002, 0.008),
+        vx: randBetween(-0.04, 0.04),
+        vy: randBetween(-0.02, 0.02),
+      }));
+      nebulas = Array.from({ length: N_NEBULA }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: randBetween(120, 260),
+        hue: Math.random() > 0.5 ? 270 : 300,
+        alpha: randBetween(0.04, 0.09),
+        dx: randBetween(-0.15, 0.15),
+        dy: randBetween(-0.08, 0.08),
+      }));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Nebula blobs
+      nebulas.forEach(n => {
+        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+        g.addColorStop(0, `hsla(${n.hue},80%,55%,${n.alpha})`);
+        g.addColorStop(1, 'transparent');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        n.x += n.dx; n.y += n.dy;
+        if (n.x < -n.r) n.x = W + n.r;
+        if (n.x > W + n.r) n.x = -n.r;
+        if (n.y < -n.r) n.y = H + n.r;
+        if (n.y > H + n.r) n.y = -n.r;
+      });
+
+      // Stars
+      stars.forEach(s => {
+        s.alpha += s.alphaDir * s.alphaSpeed;
+        if (s.alpha >= 1)   { s.alpha = 1;   s.alphaDir = -1; }
+        if (s.alpha <= 0.1) { s.alpha = 0.1; s.alphaDir =  1; }
+
+        s.x += s.vx; s.y += s.vy;
+        if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+        if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => { resize(); initStars(); });
+    resize();
+    initStars();
+    draw();
+  })();
+
+  // ── Scroll reveal ────────────────────────────────────────────
+  (function() {
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+    }, { threshold: 0 });
+    els.forEach(el => io.observe(el));
+  })();
+  </script>
+<script>
+(function(){
+  var btn  = document.getElementById('nav-toggle-btn');
+  var list = document.getElementById('nav-list');
+  var header = document.querySelector('header');
+  if (!btn || !list) return;
+
+  /* Hamburger open/close */
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var nowOpen = !list.classList.contains('nav-open');
+    list.classList.toggle('nav-open', nowOpen);
+    btn.classList.toggle('open', nowOpen);
+  });
+
+  /* Arrow toggle buttons — open/close sub-menu on mobile */
+  document.querySelectorAll('.nav-drop-toggle').forEach(function(arrow) {
+    arrow.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var li = arrow.closest('.nav-has-dropdown');
+      var wasOpen = li.classList.contains('mobile-open');
+      document.querySelectorAll('.nav-has-dropdown').forEach(function(x) {
+        x.classList.remove('mobile-open');
+      });
+      if (!wasOpen) {
+        li.classList.add('mobile-open');
+        arrow.textContent = '‹';
+      }
+      /* Reset other arrows */
+      document.querySelectorAll('.nav-drop-toggle').forEach(function(a) {
+        if (a !== arrow) a.textContent = '›';
+      });
+      if (wasOpen) arrow.textContent = '›';
+    });
+  });
+
+  /* Desktop: nav-has-dropdown links navigate normally (no preventDefault) */
+
+  /* Prevent header clicks closing the menu */
+  if (header) {
+    header.addEventListener('click', function(e) { e.stopPropagation(); });
+  }
+
+  /* Close on outside click */
+  document.addEventListener('click', function() {
+    list.classList.remove('nav-open');
+    btn.classList.remove('open');
+    document.querySelectorAll('.nav-has-dropdown').forEach(function(li) {
+      li.classList.remove('mobile-open');
+    });
+    document.querySelectorAll('.nav-drop-toggle').forEach(function(a) {
+      a.textContent = '›';
+    });
+  });
+})();
+</script>
+<script>
+/* Recent Animations — pulled live from the YouTube Data API v3.
+   NOTE(Liam): this key is public-facing (it ships in the page source), so make
+   sure it's restricted to HTTP referrers twechon.com/* and stream.twechon.com/*
+   in the Google Cloud Console → Credentials. */
+(function(){
+  var YT_API_KEY = 'AIzaSyAAZe4Gh8Gutbmh6Mm-wzuiXMw4Sye0_M4';
+  var CHANNEL_HANDLE = 'twechon';
+  var MAX_RESULTS = 8;
+
+  function timeAgo(dateStr) {
+    var diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
+    var units = [[31536000,'y'],[2592000,'mo'],[604800,'w'],[86400,'d'],[3600,'h'],[60,'m']];
+    for (var i = 0; i < units.length; i++) {
+      var val = Math.floor(diff / units[i][0]);
+      if (val >= 1) return val + units[i][1] + ' ago';
+    }
+    return 'just now';
+  }
+
+  function renderInto(container, items) {
+    container.innerHTML = '';
+    if (!items.length) {
+      var empty = document.createElement('p');
+      empty.className = 'stream-uploads-empty';
+      empty.textContent = 'No recent uploads found.';
+      container.appendChild(empty);
+      return;
+    }
+    items.forEach(function(item) {
+      var s = item.snippet;
+      var videoId = s.resourceId && s.resourceId.videoId;
+      if (!videoId) return;
+      var thumb = (s.thumbnails.medium || s.thumbnails.default).url;
+
+      var a = document.createElement('a');
+      a.className = 'stream-upload-card';
+      a.href = 'https://www.youtube.com/watch?v=' + videoId;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+
+      var thumbWrap = document.createElement('div');
+      thumbWrap.className = 'stream-upload-thumb stream-upload-thumb-video';
+      var img = document.createElement('img');
+      img.src = thumb;
+      img.alt = '';
+      thumbWrap.appendChild(img);
+
+      var info = document.createElement('div');
+      info.className = 'stream-upload-info';
+      var title = document.createElement('span');
+      title.className = 'stream-upload-title';
+      title.textContent = s.title;
+      var meta = document.createElement('span');
+      meta.className = 'stream-upload-meta';
+      meta.textContent = timeAgo(s.publishedAt);
+      info.appendChild(title);
+      info.appendChild(meta);
+
+      a.appendChild(thumbWrap);
+      a.appendChild(info);
+      container.appendChild(a);
+    });
+  }
+
+  function showError(container) {
+    container.innerHTML = '';
+    var p = document.createElement('p');
+    p.className = 'stream-uploads-empty';
+    p.textContent = 'Recent uploads are unavailable right now — check back later.';
+    container.appendChild(p);
+  }
+
+  var containers = document.querySelectorAll('[data-recent-animations]');
+  if (!containers.length) return;
+
+  fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=' + CHANNEL_HANDLE + '&key=' + YT_API_KEY)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var uploadsId = data.items && data.items[0] && data.items[0].contentDetails.relatedPlaylists.uploads;
+      if (!uploadsId) throw new Error('No uploads playlist found for channel');
+      return fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=' + MAX_RESULTS + '&playlistId=' + uploadsId + '&key=' + YT_API_KEY);
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var items = data.items || [];
+      containers.forEach(function(container) {
+        var limit = parseInt(container.getAttribute('data-limit'), 10) || items.length;
+        renderInto(container, items.slice(0, limit));
+      });
+    })
+    .catch(function(err) {
+      console.warn('Recent animations fetch failed:', err);
+      containers.forEach(showError);
+    });
+})();
+</script>
+</body>
+</html>

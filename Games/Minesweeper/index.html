@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minesweeper Lite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #020617;
+      --panel-bg: #020617;
+      --border-col: #1e293b;
+      --text-main: #e5e7eb;
+      --text-dim: #9ca3af;
+      --accent-prim: #22c55e;
+      --cell-bg: rgba(15,23,42,0.9);
+      --cell-revealed: rgba(15,23,42,1);
+      --cell-flagged: #fbbf24;
+      --cell-mine: #ef4444;
+    }
+
+    /* THEMES */
+    [data-theme="classic"] {
+      --bg-main:#020617; --panel-bg:#020617; --border-col:#1e293b;
+      --accent-prim:#22c55e; --cell-bg:#0f172a; --cell-revealed:#020617;
+    }
+    [data-theme="neon"] {
+      --bg-main:#020617; --panel-bg:#020617; --border-col:#22c55e;
+      --accent-prim:#22c55e; --cell-bg:#0f172a; --cell-revealed:#022c22;
+    }
+    [data-theme="ice"] {
+      --bg-main:#082f49; --panel-bg:#020617; --border-col:#38bdf8;
+      --accent-prim:#38bdf8; --cell-bg:#0b1120; --cell-revealed:#082f49;
+    }
+    [data-theme="magma"] {
+      --bg-main:#450a0a; --panel-bg:#020617; --border-col:#f97316;
+      --accent-prim:#f97316; --cell-bg:#1c1917; --cell-revealed:#7c2d12;
+    }
+    [data-theme="matrix"] {
+      --bg-main:#020617; --panel-bg:#020617; --border-col:#22c55e;
+      --accent-prim:#22c55e; --cell-bg:#020617; --cell-revealed:#022c22;
+    }
+    [data-theme="rainbow"] {
+      --bg-main:#020617; --panel-bg:#020617; --border-col:#ec4899;
+      --accent-prim:#ec4899; --cell-bg:#0f172a; --cell-revealed:#111827;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.15), transparent 60%) var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    .game-panel {
+      background: radial-gradient(circle at top, rgba(15,118,110,0.4), transparent 60%) var(--panel-bg);
+      border-color: var(--border-col);
+    }
+
+    .btn-main {
+      background: var(--accent-prim);
+      border-bottom: 4px solid rgba(0,0,0,0.4);
+    }
+    .btn-main:hover { filter: brightness(1.1); }
+
+    .sweeper-grid {
+      display: grid;
+      gap: 4px;
+      padding: 4px;
+      background: var(--border-col);
+      border-radius: 0.75rem;
+    }
+
+    .sweeper-cell {
+      width: 38px;
+      height: 38px;
+      background: var(--cell-bg);
+      border-radius: 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.08s, transform 0.08s;
+    }
+    .sweeper-cell:hover { transform: translateY(-1px); }
+    .sweeper-cell.revealed {
+      background: var(--cell-revealed);
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.7);
+      cursor: default;
+    }
+    .sweeper-cell.flagged {
+      background: var(--cell-flagged);
+    }
+    .sweeper-cell.mine {
+      background: var(--cell-mine);
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-2px); }
+      75% { transform: translateX(2px); }
+    }
+
+    .tag-pill {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-150%);
+      transition: transform 0.35s cubic-bezier(0.22, 0.84, 0.44, 1);
+      z-index: 50;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Scrollbars */
+    .scroll-y::-webkit-scrollbar { width: 6px; }
+    .scroll-y::-webkit-scrollbar-track { background: rgba(15,23,42,0.7); border-radius: 999px; }
+    .scroll-y::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.7); border-radius: 999px; }
+  </style>
+</head>
+
+<body class="flex items-center justify-center px-2 py-6 md:py-10" data-theme="classic">
+  <!-- Toast -->
+  <div id="toast" class="bg-slate-900/95 border border-amber-400 shadow-2xl rounded-xl px-4 py-3 flex items-center gap-3 min-w-[260px] max-w-[360px]">
+    <div class="text-2xl">⭐</div>
+    <div class="text-xs">
+      <div class="font-bold text-amber-300 uppercase tracking-[0.18em]">Unlock</div>
+      <div id="toast-text" class="text-slate-100 text-sm mt-0.5"></div>
+    </div>
+  </div>
+
+  <div class="game-panel border rounded-3xl shadow-2xl max-w-4xl w-full mx-auto px-4 sm:px-6 py-5">
+    <!-- Top bar -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+      <div>
+        <div class="inline-flex items-center gap-2 mb-1">
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+            💣 Minesweeper Lite
+          </h1>
+          <span class="tag-pill bg-emerald-500/20 border border-emerald-500/60 text-emerald-300 rounded-full px-2 py-0.5">
+            Hold to Flag
+          </span>
+        </div>
+        <p class="text-xs text-slate-400 max-w-md">
+          Tap to reveal, hold <span class="font-mono">&gt;0.3s</span> to place a flag. Win games and place flags to unlock new themes and modes.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="music-btn"
+          class="btn-main text-sm font-semibold px-3 py-2 rounded-xl shadow flex items-center gap-2">
+          <span id="music-icon">🔇</span><span class="hidden sm:inline">Music</span>
+        </button>
+        <button id="save-btn"
+          class="bg-slate-800 border border-slate-600 text-sm font-semibold px-3 py-2 rounded-xl shadow hover:bg-slate-700 flex items-center gap-2">
+          💾 <span class="hidden sm:inline">Save / Load</span>
+        </button>
+        <button id="themes-btn"
+          class="bg-sky-600 border-b-4 border-sky-900 text-sm font-semibold px-3 py-2 rounded-xl shadow hover:brightness-110 flex items-center gap-2">
+          🎨 <span class="hidden sm:inline">Themes</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5 text-xs">
+      <div class="bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2">
+        <div class="tag-pill text-slate-400 mb-1">Games</div>
+        <div class="flex justify-between items-end">
+          <div>
+            <div class="text-lg font-bold" id="stat-games">0</div>
+            <div class="text-[0.65rem] text-slate-500">Played</div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-emerald-300 font-semibold" id="stat-wins">0 Wins</div>
+            <div class="text-[0.65rem] text-slate-500" id="stat-losses">0 Losses</div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2">
+        <div class="tag-pill text-slate-400 mb-1">Win Rate</div>
+        <div class="text-lg font-bold" id="stat-winrate">0%</div>
+        <div class="text-[0.65rem] text-slate-500">All difficulties</div>
+      </div>
+      <div class="bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2">
+        <div class="tag-pill text-slate-400 mb-1">Flags</div>
+        <div class="text-lg font-bold" id="stat-flags">0</div>
+        <div class="text-[0.65rem] text-slate-500">Placed</div>
+      </div>
+      <div class="bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2">
+        <div class="tag-pill text-slate-400 mb-1">Best Streak</div>
+        <div class="text-lg font-bold" id="stat-streak">0</div>
+        <div class="text-[0.65rem] text-slate-500">Wins in a row</div>
+      </div>
+    </div>
+
+    <!-- Difficulty row -->
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <span class="tag-pill text-slate-400 mr-1">Difficulty</span>
+      <button data-diff="easy" class="diff-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-600 text-white border-b-2 border-emerald-900">
+        Easy
+      </button>
+      <button data-diff="medium" class="diff-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-100 border-b-2 border-slate-900">
+        Medium
+      </button>
+      <button data-diff="hard" class="diff-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-100 border-b-2 border-slate-900">
+        Hard
+      </button>
+      <button data-diff="extreme" class="diff-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-500 border border-slate-700/80">
+        🔒 Extreme
+      </button>
+      <button data-diff="impossible" class="diff-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-500 border border-slate-700/80">
+        🔒 Impossible
+      </button>
+
+      <span class="ml-auto text-[0.65rem] text-slate-500">
+        Unlock harder modes via quests.
+      </span>
+    </div>
+
+    <!-- Board + status -->
+    <div class="flex flex-col items-center">
+      <div id="ms-grid" class="sweeper-grid mb-3"></div>
+      <div id="ms-status" class="h-7 flex items-center justify-center text-sm font-semibold text-slate-200">
+        Good luck!
+      </div>
+      <button id="newgame-btn"
+        class="mt-3 btn-main text-sm font-semibold px-5 py-2 rounded-xl shadow hover:brightness-110">
+        🔁 New Game
+      </button>
+    </div>
+  </div>
+
+  <!-- THEMES MODAL -->
+  <div id="themes-modal"
+       class="fixed inset-0 bg-black/60 flex items-center justify-center p-4 hidden z-40">
+    <div class="bg-slate-950 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col">
+      <div class="px-5 py-3 border-b border-slate-700 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-400 tag-pill mb-1">Visual</div>
+          <h2 class="text-xl font-bold flex items-center gap-2">
+            🎨 Themes
+          </h2>
+        </div>
+        <button id="themes-close" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div class="px-5 py-3 text-xs text-slate-400">
+        Unlock themes by completing quests (wins, flags, and high difficulties).
+      </div>
+      <div class="px-4 pb-4 flex-1 overflow-y-auto scroll-y">
+        <div id="themes-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVE MODAL -->
+  <div id="save-modal"
+       class="fixed inset-0 bg-black/60 flex items-center justify-center p-4 hidden z-40">
+    <div class="bg-slate-950 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-md">
+      <div class="px-5 py-3 border-b border-slate-700 flex items-center justify-between">
+        <h2 class="text-lg font-bold">Save / Load</h2>
+        <button id="save-close" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div class="p-5 space-y-3 text-xs text-slate-300">
+        <p>
+          Progress (stats, unlocks, settings) auto-saves in your browser.
+          You can also copy a code for backup or move your save to another device.
+        </p>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btn-export"
+                  class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2 rounded-lg">
+            Copy Save Code
+          </button>
+          <button id="btn-import"
+                  class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold py-2 rounded-lg">
+            Load from Code
+          </button>
+        </div>
+        <textarea id="save-text" class="w-full h-24 mt-2 bg-black text-[0.7rem] text-emerald-300 rounded-lg border border-slate-700 p-2 font-mono" placeholder="Paste save code here to load, or it will be filled when you export."></textarea>
+        <p class="text-[0.65rem] text-slate-500">
+          Tip: Do not share your save code publicly, it contains your full game progress.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /******************************************************************
+     * AUDIO (SFX + SAME BGM AS MAIN GAME)
+     ******************************************************************/
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudioCtx() {
+      if (!audioCtx && AudioCtx) {
+        try { audioCtx = new AudioCtx(); } catch (e) { audioCtx = null; }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playTone(freq, type, dur, volDb) {
+      if (!gameState.settings.sfxOn || !AudioCtx) return;
+      initAudioCtx();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      const vol = Math.pow(10, (volDb || -8) / 20);
+      gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + dur);
+    }
+
+    const sfx = {
+      click: () => playTone(900, 'sine', 0.05, -6),
+      flag:  () => playTone(450, 'triangle', 0.08, -8),
+      win:   () => playTone(650, 'square', 0.18, -8),
+      bomb:  () => playTone(120, 'sawtooth', 0.4, -6)
+    };
+
+    // Same BGM URL as original game
+    const BGM_URL = 'https://files.catbox.moe/g3yz7s.mp3';
+    let bgmAudio = null;
+
+    function initBgm() {
+      if (!bgmAudio) {
+        try {
+          bgmAudio = new Audio(BGM_URL);
+          bgmAudio.loop = true;
+          bgmAudio.volume = 0.35;
+        } catch (e) {
+          bgmAudio = null;
+        }
+      }
+    }
+
+    function updateMusicButton() {
+      const btn = document.getElementById('music-btn');
+      const icon = document.getElementById('music-icon');
+      if (!btn || !icon) return;
+      if (gameState.settings.musicOn) {
+        icon.textContent = '🔊';
+      } else {
+        icon.textContent = '🔇';
+      }
+    }
+
+    async function toggleMusic() {
+      initBgm();
+      if (!bgmAudio) return;
+      gameState.settings.musicOn = !gameState.settings.musicOn;
+      if (gameState.settings.musicOn) {
+        try {
+          await bgmAudio.play();
+        } catch (e) {
+          gameState.settings.musicOn = false;
+        }
+      } else {
+        bgmAudio.pause();
+      }
+      updateMusicButton();
+      scheduleSave();
+    }
+
+    /******************************************************************
+     * GAME STATE
+     ******************************************************************/
+    const STORAGE_KEY = 'minesweeper_quest_v1';
+
+    const defaultState = {
+      stats: {
+        gamesPlayed: 0,
+        wins: 0,
+        losses: 0,
+        flagsPlaced: 0,
+        bestStreak: 0,
+        currentStreak: 0,
+        winsByDiff: {easy:0,medium:0,hard:0,extreme:0,impossible:0}
+      },
+      settings: {
+        difficulty: 'easy',
+        theme: 'classic',
+        musicOn: false,
+        sfxOn: true
+      },
+      unlocks: {
+        modes: {
+          extreme: false,
+          impossible: false
+        },
+        themes: {
+          classic: true,
+          neon: false,
+          ice: false,
+          magma: false,
+          matrix: false,
+          rainbow: false
+        }
+      }
+    };
+
+    let gameState = JSON.parse(JSON.stringify(defaultState));
+    let autoSaveTimer = null;
+
+    function scheduleSave() {
+      if (autoSaveTimer) clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(saveToLocal, 500);
+    }
+
+    function saveToLocal() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+      } catch (e) {}
+    }
+
+    function loadFromLocal() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const obj = JSON.parse(raw);
+        gameState = {
+          ...defaultState,
+          ...obj,
+          stats: {...defaultState.stats, ...(obj.stats||{})},
+          settings: {...defaultState.settings, ...(obj.settings||{})},
+          unlocks: {
+            modes: {...defaultState.unlocks.modes, ...(obj.unlocks && obj.unlocks.modes || {})},
+            themes: {...defaultState.unlocks.themes, ...(obj.unlocks && obj.unlocks.themes || {})}
+          }
+        };
+      } catch (e) {
+        gameState = JSON.parse(JSON.stringify(defaultState));
+      }
+    }
+
+    function exportSaveCode() {
+      const text = btoa(unescape(encodeURIComponent(JSON.stringify(gameState))));
+      const ta = document.getElementById('save-text');
+      ta.value = text;
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast('Save code copied to clipboard.');
+      } catch (e) {
+        showToast('Save code ready. Press Ctrl+C to copy.');
+      }
+    }
+
+    function importSaveCode() {
+      const ta = document.getElementById('save-text');
+      const raw = ta.value.trim();
+      if (!raw) {
+        showToast('Paste a save code first.');
+        return;
+      }
+      try {
+        const json = decodeURIComponent(escape(atob(raw)));
+        const obj = JSON.parse(json);
+        gameState = {
+          ...defaultState,
+          ...obj,
+          stats: {...defaultState.stats, ...(obj.stats||{})},
+          settings: {...defaultState.settings, ...(obj.settings||{})},
+          unlocks: {
+            modes: {...defaultState.unlocks.modes, ...(obj.unlocks && obj.unlocks.modes || {})},
+            themes: {...defaultState.unlocks.themes, ...(obj.unlocks && obj.unlocks.themes || {})}
+          }
+        };
+        showToast('Save loaded!');
+        applyTheme();
+        updateMusicButton();
+        updateStatsUI();
+        refreshDifficultyButtons();
+        initMinesweeper();
+        scheduleSave();
+      } catch (e) {
+        showToast('Invalid save code.');
+      }
+    }
+
+    /******************************************************************
+     * MINESWEEPER LOGIC (SAME MECHANICS)
+     ******************************************************************/
+    let SWEEPER_SIZE = 8;
+    let SWEEPER_MINES = 8;
+    let sweeperDifficulty = 'easy';
+    let sweeperGrid = [];
+    let msHoldTimer = null;
+    let gameOver = false;
+
+    const SWEEPER_LEVELS = {
+      easy:   { size: 6, mines: 5 },
+      medium: { size: 8, mines: 10 },
+      hard:   { size: 12, mines: 24 },
+      extreme:{ size: 16, mines: 40 },
+      impossible:{ size: 20, mines: 80 }
+    };
+
+    function setDifficulty(diff) {
+      // locking logic from quests
+      if (diff === 'extreme' && !gameState.unlocks.modes.extreme) {
+        showToast('Unlock Extreme by winning 5 Hard games.');
+        return;
+      }
+      if (diff === 'impossible' && !gameState.unlocks.modes.impossible) {
+        showToast('Unlock Impossible by winning 5 Extreme games and placing 100 flags.');
+        return;
+      }
+
+      sweeperDifficulty = diff;
+      gameState.settings.difficulty = diff;
+      const def = SWEEPER_LEVELS[diff] || SWEEPER_LEVELS.easy;
+      SWEEPER_SIZE = def.size;
+      SWEEPER_MINES = def.mines;
+      refreshDifficultyButtons();
+      initMinesweeper();
+      scheduleSave();
+    }
+
+    function refreshDifficultyButtons() {
+      document.querySelectorAll('.diff-btn').forEach(btn => {
+        const diff = btn.getAttribute('data-diff');
+        const unlocked =
+          diff === 'easy' || diff === 'medium' || diff === 'hard' ||
+          (diff === 'extreme' && gameState.unlocks.modes.extreme) ||
+          (diff === 'impossible' && gameState.unlocks.modes.impossible);
+
+        btn.className = 'diff-btn px-3 py-1.5 rounded-full text-xs font-semibold';
+
+        if (!unlocked) {
+          btn.textContent = `🔒 ${diff[0].toUpperCase() + diff.slice(1)}`;
+          btn.classList.add('bg-slate-900', 'text-slate-500', 'border', 'border-slate-700/80');
+        } else {
+          btn.textContent = diff[0].toUpperCase() + diff.slice(1);
+          if (diff === gameState.settings.difficulty) {
+            btn.classList.add('bg-emerald-600', 'text-white', 'border-b-2', 'border-emerald-900');
+          } else {
+            btn.classList.add('bg-slate-800', 'text-slate-100', 'border-b-2', 'border-slate-900');
+          }
+        }
+      });
+    }
+
+    function initMinesweeper() {
+      gameOver = false;
+      sweeperGrid = [];
+      const container = document.getElementById('ms-grid');
+      container.innerHTML = '';
+      container.style.gridTemplateColumns = `repeat(${SWEEPER_SIZE}, 1fr)`;
+
+      const status = document.getElementById('ms-status');
+      status.textContent = 'Good luck!';
+      status.className = 'h-7 flex items-center justify-center text-sm font-semibold text-slate-200';
+
+      const totalCells = SWEEPER_SIZE * SWEEPER_SIZE;
+
+      for (let i = 0; i < totalCells; i++) {
+        sweeperGrid.push({ isMine:false, revealed:false, flagged:false, count:0 });
+        const cell = document.createElement('div');
+        cell.className = 'sweeper-cell';
+        cell.id = `ms-cell-${i}`;
+
+        // Hold-to-flag (300ms)
+        cell.onmousedown = (e) => {
+          if (e.button !== 0) return;
+          if (gameOver) return;
+          msHoldTimer = setTimeout(() => {
+            handleSweeperFlag(i);
+            msHoldTimer = null;
+          }, 300);
+        };
+        cell.onmouseup = (e) => {
+          if (e.button !== 0) return;
+          if (gameOver) return;
+          if (msHoldTimer) {
+            clearTimeout(msHoldTimer);
+            msHoldTimer = null;
+            handleSweeperClick(i);
+          }
+        };
+        cell.onmouseleave = () => {
+          if (msHoldTimer) {
+            clearTimeout(msHoldTimer);
+            msHoldTimer = null;
+          }
+        };
+        cell.oncontextmenu = (e) => { e.preventDefault(); return false; };
+
+        container.appendChild(cell);
+      }
+
+      // Place mines
+      let placed = 0;
+      while (placed < SWEEPER_MINES) {
+        const idx = Math.floor(Math.random() * sweeperGrid.length);
+        if (!sweeperGrid[idx].isMine) {
+          sweeperGrid[idx].isMine = true;
+          placed++;
+        }
+      }
+
+      // Neighbor counts
+      for (let i = 0; i < sweeperGrid.length; i++) {
+        if (sweeperGrid[i].isMine) continue;
+        const r = Math.floor(i / SWEEPER_SIZE);
+        const c = i % SWEEPER_SIZE;
+        let count = 0;
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            if (!dr && !dc) continue;
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < SWEEPER_SIZE && nc >= 0 && nc < SWEEPER_SIZE) {
+              if (sweeperGrid[nr * SWEEPER_SIZE + nc].isMine) count++;
+            }
+          }
+        }
+        sweeperGrid[i].count = count;
+      }
+
+      // update stats (starting a new game counts as played)
+      gameState.stats.gamesPlayed++;
+      updateStatsUI();
+      scheduleSave();
+    }
+
+    function handleSweeperFlag(idx) {
+      const cell = sweeperGrid[idx];
+      if (cell.revealed || gameOver) return;
+      cell.flagged = !cell.flagged;
+      if (cell.flagged) {
+        gameState.stats.flagsPlaced++;
+        sfx.flag();
+        checkFlagQuests();
+      }
+      renderSweeperCell(idx);
+      updateStatsUI();
+      scheduleSave();
+    }
+
+    function handleSweeperClick(idx) {
+      const cell = sweeperGrid[idx];
+      if (cell.revealed || cell.flagged || gameOver) return;
+
+      if (cell.isMine) {
+        cell.revealed = true;
+        sfx.bomb();
+        document.getElementById('ms-status').textContent = 'BOOM! Game Over.';
+        document.getElementById('ms-status').className =
+          'h-7 flex items-center justify-center text-sm font-bold text-red-400';
+        revealAllMines();
+        gameOver = true;
+        gameState.stats.losses++;
+        gameState.stats.currentStreak = 0;
+        updateStatsUI();
+        scheduleSave();
+      } else {
+        revealSweeperCell(idx);
+        checkSweeperWin();
+      }
+    }
+
+    function revealSweeperCell(idx) {
+      const cell = sweeperGrid[idx];
+      if (cell.revealed || cell.flagged) return;
+      cell.revealed = true;
+      renderSweeperCell(idx);
+      sfx.click();
+
+      if (cell.count === 0) {
+        const r = Math.floor(idx / SWEEPER_SIZE);
+        const c = idx % SWEEPER_SIZE;
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < SWEEPER_SIZE && nc >= 0 && nc < SWEEPER_SIZE) {
+              revealSweeperCell(nr * SWEEPER_SIZE + nc);
+            }
+          }
+        }
+      }
+    }
+
+    function renderSweeperCell(idx) {
+      const el = document.getElementById(`ms-cell-${idx}`);
+      const cell = sweeperGrid[idx];
+      if (!el) return;
+
+      if (cell.revealed) {
+        el.className = 'sweeper-cell revealed';
+        if (cell.isMine) {
+          el.classList.add('mine');
+          el.textContent = '💣';
+        } else if (cell.count > 0) {
+          el.textContent = cell.count;
+          const colors = ['#e5e7eb','#3b82f6','#22c55e','#ef4444','#a855f7','#eab308'];
+          el.style.color = colors[Math.min(colors.length - 1, cell.count)];
+        } else {
+          el.textContent = '';
+          el.style.color = '#e5e7eb';
+        }
+      } else if (cell.flagged) {
+        el.className = 'sweeper-cell flagged';
+        el.textContent = '🚩';
+        el.style.color = '#1f2933';
+      } else {
+        el.className = 'sweeper-cell';
+        el.textContent = '';
+        el.style.color = '#e5e7eb';
+      }
+    }
+
+    function revealAllMines() {
+      sweeperGrid.forEach((c, i) => {
+        if (c.isMine) {
+          c.revealed = true;
+          renderSweeperCell(i);
+        }
+      });
+    }
+
+    function checkSweeperWin() {
+      if (gameOver) return;
+      const safe = sweeperGrid.filter(c => !c.isMine).length;
+      const revealedSafe = sweeperGrid.filter(c => !c.isMine && c.revealed).length;
+      if (safe === revealedSafe) {
+        // Win!
+        gameOver = true;
+        gameState.stats.wins++;
+        gameState.stats.currentStreak++;
+        if (gameState.stats.currentStreak > gameState.stats.bestStreak) {
+          gameState.stats.bestStreak = gameState.stats.currentStreak;
+        }
+        const diff = sweeperDifficulty || gameState.settings.difficulty || 'easy';
+        if (!gameState.stats.winsByDiff[diff]) gameState.stats.winsByDiff[diff] = 0;
+        gameState.stats.winsByDiff[diff]++;
+
+        sfx.win();
+        const diffName = diff[0].toUpperCase() + diff.slice(1);
+        const st = document.getElementById('ms-status');
+        st.textContent = `Cleared ${diffName}!`;
+        st.className = 'h-7 flex items-center justify-center text-sm font-bold text-emerald-400';
+
+        updateStatsUI();
+        checkWinQuests();
+        scheduleSave();
+      }
+    }
+
+    /******************************************************************
+     * QUESTS / UNLOCKS
+     ******************************************************************/
+    function unlockTheme(key, label) {
+      if (!gameState.unlocks.themes[key]) {
+        gameState.unlocks.themes[key] = true;
+        showToast(`New theme unlocked: ${label}`);
+      }
+    }
+
+    function unlockMode(key, label) {
+      if (!gameState.unlocks.modes[key]) {
+        gameState.unlocks.modes[key] = true;
+        showToast(`New mode unlocked: ${label}`);
+        refreshDifficultyButtons();
+      }
+    }
+
+    function checkFlagQuests() {
+      const f = gameState.stats.flagsPlaced;
+      if (f >= 50) unlockTheme('ice', 'Frostbite');
+      if (f >= 100) unlockTheme('matrix', 'Matrix');
+      if (f >= 150) unlockTheme('magma', 'Magma Core');
+      if (gameState.stats.winsByDiff.extreme >= 5 && f >= 100) {
+        unlockMode('impossible', 'Impossible');
+      }
+      buildThemesUI();
+    }
+
+    function checkWinQuests() {
+      const s = gameState.stats;
+      const wDiff = s.winsByDiff;
+
+      if (s.wins >= 10) unlockTheme('neon', 'Neon Night');
+      if ((wDiff.hard || 0) >= 5) unlockTheme('magma', 'Magma Core');
+      if ((wDiff.extreme || 0) >= 5) unlockTheme('rainbow', 'Rainbow Storm');
+      if ((wDiff.hard || 0) >= 5) unlockMode('extreme', 'Extreme');
+      if ((wDiff.extreme || 0) >= 5 && s.flagsPlaced >= 100) {
+        unlockMode('impossible', 'Impossible');
+      }
+
+      buildThemesUI();
+    }
+
+    /******************************************************************
+     * THEMES UI
+     ******************************************************************/
+    const THEME_INFO = {
+      classic: { name:'Classic', desc:'Default dark space board.', quest:'Unlocked from the start.' },
+      neon:    { name:'Neon Night', desc:'Electric greens and blues.', quest:'Win 10 games total.' },
+      ice:     { name:'Frostbite', desc:'Frozen blues & shards.', quest:'Place 50 flags.' },
+      magma:   { name:'Magma Core', desc:'Molten lava cells.', quest:'Place 150 flags or win 5 Hard games.' },
+      matrix:  { name:'Matrix', desc:'Glowing code grid.', quest:'Place 100 flags.' },
+      rainbow: { name:'Rainbow Storm', desc:'Chaotic color swirl.', quest:'Win 5 Extreme games.' }
+    };
+
+    function applyTheme() {
+      document.body.setAttribute('data-theme', gameState.settings.theme || 'classic');
+    }
+
+    function buildThemesUI() {
+      const grid = document.getElementById('themes-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      Object.keys(THEME_INFO).forEach(key => {
+        const unlocked = !!gameState.unlocks.themes[key];
+        const info = THEME_INFO[key];
+        const card = document.createElement('button');
+        card.className =
+          'w-full text-left rounded-xl border px-3 py-3 text-xs mb-1 ' +
+          'flex flex-col justify-between transition shadow-sm';
+
+        if (unlocked) {
+          card.className += ' border-emerald-500/70 bg-slate-900/80 hover:bg-slate-900';
+        } else {
+          card.className += ' border-slate-700/80 bg-slate-900/80 opacity-50 cursor-not-allowed';
+        }
+
+        let titleLine = info.name;
+        if (gameState.settings.theme === key) {
+          titleLine += '  •  Equipped';
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <div class="font-semibold text-slate-50 text-sm">${titleLine}</div>
+            <div class="tag-pill ${
+              unlocked ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'
+            } rounded-full px-2 py-0.5 border ${
+              unlocked ? 'border-emerald-500/60' : 'border-slate-700'
+            }">
+              ${unlocked ? 'Unlocked' : 'Locked'}
+            </div>
+          </div>
+          <div class="text-[0.7rem] text-slate-300 mb-1">${info.desc}</div>
+          <div class="text-[0.65rem] text-slate-500">${info.quest}</div>
+        `;
+
+        if (unlocked) {
+          card.onclick = () => {
+            gameState.settings.theme = key;
+            applyTheme();
+            buildThemesUI();
+            scheduleSave();
+          };
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    /******************************************************************
+     * STATS UI
+     ******************************************************************/
+    function updateStatsUI() {
+      const s = gameState.stats;
+      const games = s.gamesPlayed;
+      const wins = s.wins;
+      const losses = s.losses;
+      const winrate = games > 0 ? Math.round((wins / games) * 100) : 0;
+
+      document.getElementById('stat-games').textContent = games;
+      document.getElementById('stat-wins').textContent = wins + ' Wins';
+      document.getElementById('stat-losses').textContent = losses + ' Losses';
+      document.getElementById('stat-winrate').textContent = winrate + '%';
+      document.getElementById('stat-flags').textContent = s.flagsPlaced;
+      document.getElementById('stat-streak').textContent = s.bestStreak;
+    }
+
+    /******************************************************************
+     * TOAST
+     ******************************************************************/
+    let toastTimer = null;
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      const tt = document.getElementById('toast-text');
+      if (!toast || !tt) return;
+      tt.textContent = text || '';
+      toast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    /******************************************************************
+     * MODALS
+     ******************************************************************/
+    function showModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+    function hideModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    /******************************************************************
+     * INIT
+     ******************************************************************/
+    window.addEventListener('DOMContentLoaded', () => {
+      // Load state
+      loadFromLocal();
+
+      // Apply theme / audio settings
+      applyTheme();
+      updateMusicButton();
+      if (gameState.settings.musicOn) {
+        initBgm();
+        bgmAudio && bgmAudio.play().catch(()=>{ gameState.settings.musicOn = false; updateMusicButton(); });
+      }
+
+      // Build UI
+      buildThemesUI();
+      updateStatsUI();
+      refreshDifficultyButtons();
+      sweeperDifficulty = gameState.settings.difficulty || 'easy';
+      setTimeout(() => initMinesweeper(), 0);
+
+      // Buttons
+      document.getElementById('newgame-btn').onclick = () => initMinesweeper();
+      document.getElementById('music-btn').onclick = () => toggleMusic();
+      document.getElementById('themes-btn').onclick = () => showModal('themes-modal');
+      document.getElementById('themes-close').onclick = () => hideModal('themes-modal');
+      document.getElementById('save-btn').onclick = () => showModal('save-modal');
+      document.getElementById('save-close').onclick = () => hideModal('save-modal');
+      document.getElementById('btn-export').onclick = () => exportSaveCode();
+      document.getElementById('btn-import').onclick = () => importSaveCode();
+
+      document.querySelectorAll('.diff-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const d = btn.getAttribute('data-diff');
+          setDifficulty(d);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
