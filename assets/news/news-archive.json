@@ -7,5 +7,32 @@
     "link": "https://twechon.com/Home/",
     "permalink": "/News/1/",
     "publishedAt": "2026-07-31"
+  },
+  {
+    "id": 2,
+    "title": "Twechon Showcase - August. 8th",
+    "shortDescription": "This year's Twechon Showcase will be premiering in August. 8th at 5 PM EST.",
+    "image": "/assets/news/article-2.png",
+    "link": "https://twechon.com/discord",
+    "permalink": "/News/2/",
+    "publishedAt": "2026-08-01"
+  },
+  {
+    "id": 3,
+    "title": "Join the Twechon Studio today!",
+    "shortDescription": "We are currently hiring voice actors, composers, and editors to join our animating journey in our upcoming projects. To join our team, join our studio using the link below and fill out the form.",
+    "image": "/assets/news/article-3.png",
+    "link": "https://twechon.com/studio",
+    "permalink": "/News/3/",
+    "publishedAt": "2026-08-01"
+  },
+  {
+    "id": 4,
+    "title": "Welcome to Twechon.com!",
+    "shortDescription": "The official twechon Site ecosystem is here, so far it consists of twechon.com, merch.twechon.com, and stream.twechon.com. Check all of them out!",
+    "image": "/assets/news/article-4.png",
+    "link": "https://twechon.com/home",
+    "permalink": "/News/4/",
+    "publishedAt": "2026-08-01"
   }
 ]
