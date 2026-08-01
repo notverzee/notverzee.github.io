@@ -1,0 +1,145 @@
+TWECHON.COM — NEWS SYSTEM + TIKTOK/COMIC UPDATE
+=================================================
+Export date: matches this conversation. This zip contains ONLY files
+that are new or were changed — every path below is exactly where it
+goes on your live site (twechon.com repo root = the root of this zip).
+
+Nothing here needs renaming. Upload each file to the same path it
+already has in this zip, overwriting anything that already exists at
+that path.
+
+
+─────────────────────────────────────────────
+BRAND NEW FILES (didn't exist before)
+─────────────────────────────────────────────
+
+news-common.js
+  → site root (next to styles.css)
+  Shared JS for the whole news system: the header bell, the homepage
+  banner, the archive loader, and the /Dev/ passcode gate. Every page
+  now includes this via <script src="/news-common.js"></script>.
+  The Dev Mode passcode is set near the top of this file
+  (DEV_PASSCODE = 'twechon-dev') — change it to whatever you like.
+
+News/index.html
+  → /News/ on your site
+  The new "News" tab. Lists EVERY article that's ever been published
+  (reads assets/news/news-archive.json), most recent first. This is
+  what makes "previously published news" possible — nothing here
+  gets overwritten when you publish something new.
+
+News/1/index.html
+  → /News/1/ on your site
+  An example article page (matches the placeholder entry already
+  seeded into news-archive.json) — replace it the first time you
+  publish something real from Dev Mode.
+
+Dev/index.html
+  → /Dev/ on your site
+  The news creator tool. Not linked anywhere in the site nav on
+  purpose — go to twechon.com/Dev/ directly, enter the passcode, and
+  you'll find a form (Headline / Short Description / Full
+  Description / Link / Image) with a live preview. You can queue up
+  more than one article before downloading. "Download ZIP" fetches
+  your LIVE news-archive.json, adds the new entries with the next
+  available IDs, generates each one's permanent /News/<id>/ page,
+  and bundles it all into a zip for you to upload — same workflow as
+  this delivery, just automated.
+
+assets/news.png
+  → /assets/news.png
+  Icon for the "News" tab in the header nav, matching the size/style
+  of your other nav icons (Home, Shows, etc.). It's a plain
+  placeholder I generated — swap it for a proper icon whenever you
+  want; nothing depends on its exact appearance.
+
+assets/comic-icon.png
+  → /assets/comic-icon.png
+  Placeholder icon for the Crazy Just Happens webcomic entry on the
+  Socials page. Same deal — swap it out whenever you have real art
+  for it.
+
+assets/news/news-archive.json
+  → /assets/news/news-archive.json
+  The full news history — a JSON array, one entry per published
+  article. Comes seeded with one placeholder entry (id 1) matching
+  News/1/. You normally never hand-edit this; Dev Mode manages it.
+
+assets/news/article-1.png
+  → /assets/news/article-1.png
+  Banner image for the placeholder News/1/ article. Replace when you
+  publish real news.
+
+assets/news/README.txt
+  → /assets/news/README.txt
+  Explains the news-archive.json format in more detail, for future
+  reference — doesn't affect the live site either way.
+
+
+─────────────────────────────────────────────
+MODIFIED FILES (already existed — these overwrite them)
+─────────────────────────────────────────────
+
+styles.css
+  → site root
+  Added CSS for the header bell, notification dropdown, homepage
+  banner, /News/ archive cards, article pages, and the /Dev/ editor
+  UI. Everything else in this file is untouched — I only appended
+  new rules at the end, nothing existing was changed.
+
+Home/index.html, Stream/index.html, Shows/index.html,
+Channels/index.html, Socials/index.html, Games/index.html,
+Music/index.html, Team/index.html, Merch/index.html, 404.html
+  → their existing paths (/Home/, /Stream/, etc. — 404.html at root)
+  Every one of these got the same four additions:
+    1. A "News" item in the header nav (before Stream)
+    2. The notification bell icon in the header, next to the
+       account area — click it to see the 3 most recent articles
+    3. A second TikTok link (@twechon) in the Socials dropdown menu
+       and in the footer's row of social icons
+    4. A new "Comics" column in the footer linking to Crazy Just
+       Happens, plus "News" added to the footer's Pages list
+    5. The <script src="/news-common.js"> include, so the bell works
+
+  Home/index.html ALSO got a new banner section (the news-hero) right
+  under the "Welcome to Twechon" hero — it rotates through the 3 most
+  recent articles automatically.
+
+  Socials/index.html ALSO got, in the actual page content (not just
+  header/footer):
+    - A new card for TikTok (@twechon) — "Comics by Crazy Just
+      Happens and more animations" — right after the existing TikTok
+      card
+    - A new "Comics" section below the main Follow Me list, with a
+      card for Crazy Just Happens: "A webcomic inspired by Mamflux,
+      following the main characters enjoying their time without
+      employment in Arcadia." Links to
+      https://crazyjusthappens.the-comic.org
+
+
+─────────────────────────────────────────────
+WHY THE NEWS SYSTEM WORKS DIFFERENTLY HERE THAN ON stream.twechon.com
+─────────────────────────────────────────────
+The stream site's news system only ever remembered the 3 most recent
+posts — publishing a 4th meant the 1st was gone for good. Since you
+specifically asked for a tab that shows "previously published news,"
+I built this version around a single growing archive file instead:
+every article you ever publish stays permanently at its own /News/N/
+page and stays listed on /News/ forever. The header bell and
+homepage banner still only show the latest 3 — same feel as before —
+but nothing is ever lost.
+
+
+─────────────────────────────────────────────
+THINGS WORTH KNOWING
+─────────────────────────────────────────────
+- Dev Mode's passcode check is client-side only (same as the stream
+  site's) — it keeps casual visitors out, not a determined one.
+  Anyone can view news-common.js's source and read the passcode.
+- This site has no backend (GitHub Pages), so "publishing" always
+  means: fill in Dev Mode → download the zip it gives you → upload
+  those files over your site. There's no way around that last
+  manual step without adding real server infrastructure.
+- The placeholder icons (news.png, comic-icon.png, article-1.png)
+  are simple generated graphics, not final art — swap them whenever
+  you're ready, filenames don't need to change.

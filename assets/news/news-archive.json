@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "title": "Welcome to Twechon News",
+    "shortDescription": "This is a placeholder entry — publish your first real update from Developer Mode to replace it.",
+    "image": "/assets/news/article-1.png",
+    "link": "https://twechon.com/Home/",
+    "permalink": "/News/1/",
+    "publishedAt": "2026-07-31"
+  }
+]
