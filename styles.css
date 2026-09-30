@@ -955,6 +955,7 @@ nav a:hover .nav-icon, nav a.active .nav-icon { opacity: 1; }
   opacity:0; transition:opacity .6s ease;
 }
 .merch-carousel-wrap img.carousel-active { opacity:1; }
+a.merch-carousel-wrap { display:block; cursor:pointer; }
 
 /* ════════════════════════════════════════════════
    STREAM PAGE
