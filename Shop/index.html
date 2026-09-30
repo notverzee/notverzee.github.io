@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="canonical" href="https://twechon.com/Shop">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twechon — Shop</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/verzeefavicon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <!-- Open Graph / Discord embed -->
+  <meta property="og:type"         content="website">
+  <meta property="og:site_name"    content="Twechon">
+  <meta property="og:url"          content="https://twechon.com/Shop">
+  <meta property="og:title"        content="Twechon Merch">
+  <meta property="og:description"  content="Choose your store: Fourthwall or ACGgoods.">
+  <meta property="og:image"        content="https://twechon.com/assets/embed.png">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Twechon Merch">
+  <meta name="twitter:description" content="Choose your store: Fourthwall or ACGgoods.">
+  <meta name="twitter:image"       content="https://twechon.com/assets/embed.png">
+  <meta name="description"         content="Choose your store: Fourthwall or ACGgoods.">
+</head>
+<body>
+
+  <canvas id="star-canvas"></canvas>
+
+  <div class="page shop-page">
+    <div class="shop-grid">
+
+      <a class="card shop-btn fade-up" href="https://twechon-shop.fourthwall.com" target="_blank" rel="noopener noreferrer">
+        <div class="shop-btn-img">
+          <img src="/assets/shop-fourthwall.png" alt="Fourthwall Merch">
+        </div>
+        <div class="shop-btn-body">
+          <h2 class="shop-btn-title">Fourthwall Merch</h2>
+          <p class="shop-btn-desc">The original merch page for Twechon apparel, stickers, accessories, and more.</p>
+        </div>
+      </a>
+
+      <a class="card shop-btn fade-up" href="https://twechon.acggoods.com" target="_blank" rel="noopener noreferrer">
+        <div class="shop-btn-img">
+          <img src="/assets/shop-acggoods.png" alt="ACGgoods Merch">
+        </div>
+        <div class="shop-btn-body">
+          <h2 class="shop-btn-title">ACGgoods Merch</h2>
+          <p class="shop-btn-desc">The page where you can buy keychains, plushes, standees, and more.</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    var c=document.getElementById("star-canvas"),ctx=c.getContext("2d"),W,H,stars=[],nebulas=[];
+    function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+    function rand(a,b){return a+Math.random()*(b-a);}
+    function init(){
+      stars=Array.from({length:220},()=>({x:Math.random()*W,y:Math.random()*H,r:rand(.3,1.8),alpha:rand(.2,1),aDir:Math.random()>.5?1:-1,aSpd:rand(.002,.008),vx:rand(-.04,.04),vy:rand(-.02,.02)}));
+      nebulas=Array.from({length:5},()=>({x:Math.random()*W,y:Math.random()*H,r:rand(120,260),hue:Math.random()>.5?270:300,alpha:rand(.04,.09),dx:rand(-.15,.15),dy:rand(-.08,.08)}));
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      nebulas.forEach(n=>{var g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);g.addColorStop(0,`hsla(${n.hue},80%,55%,${n.alpha})`);g.addColorStop(1,"transparent");ctx.fillStyle=g;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();n.x+=n.dx;n.y+=n.dy;if(n.x<-n.r)n.x=W+n.r;if(n.x>W+n.r)n.x=-n.r;if(n.y<-n.r)n.y=H+n.r;if(n.y>H+n.r)n.y=-n.r;});
+      stars.forEach(s=>{s.alpha+=s.aDir*s.aSpd;if(s.alpha>=1){s.alpha=1;s.aDir=-1;}if(s.alpha<=.1){s.alpha=.1;s.aDir=1;}s.x+=s.vx;s.y+=s.vy;if(s.x<0)s.x=W;if(s.x>W)s.x=0;if(s.y<0)s.y=H;if(s.y>H)s.y=0;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${s.alpha})`;ctx.fill();});
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener("resize",()=>{resize();init();});
+    resize();init();draw();
+  })();
+  </script>
+</body>
+</html>
